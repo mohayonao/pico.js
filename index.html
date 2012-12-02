@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <title>pico.js - Simple interface for a real-time audio processing</title>
+    <link rel="stylesheet" href="misc/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="misc/prettify.css" type="text/css" />
+    <style>
+      .header h1 {font-size:8em;line-height:1.2em;}
+      h2 {margin:25px 0 15px}
+      h2:before {content:"■ "}
+      button {margin-left:2px}
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>pico.js</h1>
+        <p><small>リアルタイムに信号処理を行なうための簡易インターフェイス</small></p>
+      </div>
+      
+      <h2>使い方</h2>
+      <div class="row">
+        <div class="span6">
+          <h3>基本</h3>
+          <ol>
+            <li>
+              <h4>関数 <code>process(L, R)</code> の定義されたオブジェクトを用意</h4>
+              <p>L と R の型は Float32Array です</p>
+            </li>
+            <li>
+              <h4><code>pico.play(gen);</code> で処理開始</h4>
+              <p>1 の <code>process(L, R)</code> が呼ばれるので L と R に信号を書き込みます</p>
+            </li>
+            <li>
+              <h4><code>pico.pause();</code> で処理停止</h4>
+              <p>静寂に戻るまでが音楽です</p>
+            </li>
+          </ol>
+        </div>
+        <div class="span6">
+          <h3>
+            ex.01
+            <button class="btn btn-mini pull-right">
+              <i class="icon-pause"></i> Pause
+            </button>
+            <button class="btn btn-mini pull-right" data="1">
+              <i class="icon-play"></i> Play
+            </button>
+          </h3>
+          <pre class="prettyprint lang-js">// ホワイトノイズを出力する
+var noise = {
+    process: function(L, R) {
+        for (var i = 0; i < L.length; i++) {
+            L[i] = R[i] = Math.random() * 0.25;
+        }
+    }
+};
+pico.play(noise);
+</pre>
+          
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="span6">
+          <h3>その他の便利な機能</h3>
+          <ol>
+            <li>
+              <h4>サンプリングレートの変更</h4>
+              <p><code>pico.setup({samplerate:24000})</code></p>
+              <p>サンプリングレートは 8000, 11025, 12000, 16000, 22050, 24000, 32000, 44100, 48000 のいずれかを指定してください</p>
+            </li>
+            <li>
+              <h4>追加クラスを使って Flash Player 経由で再生</h4>
+              <p><code style="color:green">&lt;script src="libs/PicoFlashPlayer.js"&gt;&lt/script&gt;</code></p>
+              <p>追加のスクリプトを読み込んだ後, <code>bind()</code> で実装クラスを指定します.</p>
+              <p><code>pico.bind(pico.FlashPlayer,{src:"libs/PicoFlashPlayer.swf"})</code></p>
+            </li>
+            <li>
+              <h4>Macの場合 node.js でも使えます</h4>
+              <p>詳しくは, リポジトリ内 demo/node-demo.js を参照してください.</p>
+            </li>
+          </ol>
+        </div>
+        <div class="span6">
+          <h3>
+            ex.02
+            <button class="btn btn-mini pull-right">
+              <i class="icon-pause"></i> Pause
+            </button>
+            <button class="btn btn-mini pull-right" data="2">
+              <i class="icon-play"></i> Play
+            </button>
+          </h3>
+          <pre class="prettyprint lang-js">// サイントーンを出力する
+function sinetone(freq) {
+    var phase = 0,
+        phaseStep = freq / pico.samplerate;
+    return {
+        process: function(L, R) {
+            for (var i = 0; i < L.length; i++) {
+                L[i] = R[i] = Math.sin(6.28318 * phase) * 0.25;
+                phase += phaseStep;
+            }
+        }
+    };
+}
+pico.play(sinetone(880));
+</pre>          
+        </div>
+      </div>
+
+      <h2>リファレンス</h2>
+      <div class="row">
+        <div class="span6">
+          <h3>メソッド</h3>
+          <ol>
+            <li>
+              <h4><code>pico.play(gen)</code></h4>
+              <p>再生を開始する</p>
+            </li>
+            <li>
+              <h4><code>pico.pause()</code></h4>
+              <p>再生を停止する</p>
+            </li>
+            <li>
+              <h4><code>pico.setup(opts)</code></h4>
+              <p>サンプリングレート, cellsize を設定する</p>
+            </li>
+            <li>
+              <h4><code>pico.bind(PlayerClass, opts)</code></h4>
+              <p>プレイヤー実装クラスを使用する</p>
+            </li>
+          </ol>
+          <h3>プロパティ</h3>
+          <ul>
+            <li>
+              <h4><code>pico.isPlaying</code></h4>
+              <p>処理中かどうかを返す</p>
+            </li>
+            <li>
+              <h4><code>pico.env</code></h4>
+              <p>実行環境を返す (webkit, moz, nop=利用できない)</p>
+            </li>
+            <li>
+              <h4><code>pico.samplerate</code></h4>
+              <p>サンプリングレートを返す</p>
+            </li>
+            <li>
+              <h4><code>pico.channels</code></h4>
+              <p>チャンネル数を返す (2で固定)</p>
+            </li>
+            <li>
+              <h4><code>pico.cellsize</code></h4>
+              <p>関数 <code>process</code> で処理するサンプル数を返す</p>
+            </li>
+          </ul>
+        </div>
+        <div class="span6">
+          <h3>
+            ex.03
+            <button class="btn btn-mini pull-right">
+              <i class="icon-pause"></i> Pause
+            </button>
+            <button class="btn btn-mini pull-right" data="3">
+              <i class="icon-play"></i> Play
+            </button>
+          </h3>
+          <pre class="prettyprint lang-js">// 1行音楽
+window.f1 = function(t) {
+    return Math.sin(t*(0.001+Math.sin(t>>10)))*64;
+};
+window.f2 = function(t) {
+    return (t>>9)&((t<<5)|(Math.sin(t*1.4142)*3000));
+};
+
+function oneliner() {
+    var t = 0, dt = 8000 / pico.samplerate;
+    
+    return {
+        process: function(L, R) {
+            for (var i = 0; i < L.length; i++) {
+                L[i] = (window.f1(t|0) % 256) / 512;
+                R[i] = (window.f2(t|0) % 256) / 512;
+                t += dt;
+            }
+        }
+    };
+}
+pico.play(oneliner());
+</pre>
+        </div>
+      </div>
+      
+      <h2>その他</h2>
+      <div class="row">
+        <div class="span6">
+          <h3>ダウンロード</h3>
+          <p>Minified: <a href="./pico.js">pico.js</a></p>
+          <p>Development: <a href="./pico.dev,js">pico.dev.js</a></p>
+          <h3>ソースコード</h3>
+          <p><a href="https://github.com/mohayonao/pico.js" target="github">Hosted on GitHub</a></p>
+          <h3>ライセンス</h3>
+          <p>MIT</p>
+        </div>
+        <div class="span6">
+          <h3>
+            ex.04
+            <button class="btn btn-mini pull-right">
+              <i class="icon-pause"></i> Pause
+            </button>
+            <button class="btn btn-mini pull-right" data="4">
+              <i class="icon-play"></i> Play
+            </button>
+          </h3>
+          <pre class="prettyprint lang-js">// MMLと簡単なFM音源のデモ
+// TO MAKE THE END OF BATTLE/Ys2
+//     Copyright©　Nihon Falcom Corporation
+// 
+// 元データに以下のデータを使わせていただきました
+// http://d.hatena.ne.jp/mosshm/20071013/p1
+
+pico.play(demo());
+</pre>
+        </div>
+      </div>
+    </div><!-- /container -->
+    
+    <script src="misc/jquery.min.js"></script>
+    <script src="misc/prettify.js"></script>
+    
+    <script src="pico.js"></script>
+    <script src="libs/PicoFlashPlayer.js"></script>
+    <script src="libs/PicoTagPlayer.js"></script>
+    <script src="libs/PicoDelayNode.js"></script>
+    <script src="demo/demo.js"></script>
+    
+    <script>
+      if (!window.Float32Array) {
+          window.Float32Array = Array;
+      }
+      
+      $(function() {
+          var noise = {
+              process: function(L, R) {
+                  for (var i = 0; i < L.length; i++) {
+                      L[i] = R[i] = Math.random() * 0.25;
+                  }
+              }
+          };
+          
+          function sinetone(freq) {
+              var phase = 0,
+                  phaseStep = freq / pico.samplerate;
+              return {
+                  process: function(L, R) {
+                      for (var i = 0; i < L.length; i++) {
+                          L[i] = R[i] = Math.sin(2 * Math.PI * phase) * 0.25;
+                          phase += phaseStep;
+                      }
+                  }
+              };
+          }
+          
+          window.f1 = function(t) {
+              return Math.sin(t*(0.001+Math.sin(t>>10)))*64;
+          };
+          window.f2 = function(t) {
+              return (t>>9)&((t<<5)|(Math.sin(t*1.4142)*3000));
+          };
+          
+          function oneliner() {
+              var t = 0, dt = 8000 / pico.samplerate;
+              
+              return {
+                  process: function(L, R) {
+                      for (var i = 0; i < L.length; i++) {
+                          L[i] = (window.f1(t|0) % 256) / 512;
+                          R[i] = (window.f2(t|0) % 256) / 512;
+                          t += dt;
+                      }
+                  }
+              };
+          }
+          
+          if (pico.env === "nop") {
+              pico.bind(pico.FlashPlayer, {src:"libs/PicoFlashPlayer.swf"});
+          }
+          
+          prettyPrint();
+
+          var gen = [ null,
+                      function() {
+                          return noise;
+                      },
+                      function() {
+                          return sinetone(880);
+                      },
+                      function() {
+                          return oneliner();
+                      },
+                      function() {
+                          return demo();
+                      } ];
+          
+          $("button").on("click", function() {
+              var id = $(this).attr("data")|0;
+              pico.pause();
+              if (id > 0) pico.play(gen[id]());
+          });
+      });
+    </script>
+  </body>
+</html>

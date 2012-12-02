@@ -1,0 +1,6 @@
+{
+    "newcap" : false,
+    "browser": true,
+    "node"   : true,
+    "predef" : ["pico","webkitAudioContext","ActiveXObject"]
+}
