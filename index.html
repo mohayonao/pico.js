@@ -226,21 +226,31 @@ pico.play(demo());
         </div>
       </div>
     </div><!-- /container -->
-    
+    <script>
+      if (!window.Float32Array) {
+          window.Float32Array = function(n) {
+              if (typeof n === "number") {
+                  var array = new Array(n);
+                  while (n--) array[n] = 0;
+                  return array;
+              } else if (Array.isArray(n)) {
+                  var array = new Array(n.length);
+                  var i = n.length;
+                  while (i--) array[i] = n[i];
+                  return array;
+              }
+          };
+      }
+    </script>    
     <script src="misc/jquery.min.js"></script>
     <script src="misc/prettify.js"></script>
     
     <script src="pico.js"></script>
     <script src="libs/PicoFlashPlayer.js"></script>
-    <script src="libs/PicoTagPlayer.js"></script>
     <script src="libs/PicoDelayNode.js"></script>
     <script src="demo/demo.js"></script>
     
     <script>
-      if (!window.Float32Array) {
-          window.Float32Array = Array;
-      }
-      
       $(function() {
           var noise = {
               process: function(L, R) {
@@ -287,7 +297,6 @@ pico.play(demo());
           if (pico.env === "nop") {
               pico.bind(pico.FlashPlayer, {src:"libs/PicoFlashPlayer.swf"});
           }
-          
           prettyPrint();
 
           var gen = [ null,
