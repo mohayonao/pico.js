@@ -327,7 +327,7 @@ pico.play(demo());
               };
           }
           
-          if (pico.env === "nop") {
+          if (pico.env === "nop" || (pico.env === "webkit" && navigator.userAgent.indexOf("Linux") !== -1)) {
               pico.bind(pico.FlashPlayer, {src:"libs/PicoFlashPlayer.swf"});
           }
           prettyPrint();
