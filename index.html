@@ -183,7 +183,7 @@ window.f2 = function(t) {
 
 function oneliner() {
     var t = 0, dt = 8000 / pico.samplerate;
-    var delay = new pico.DelayNode({delayTime:225,feedback:.8});
+    var delay = new pico.DelayNode({time:225, feedback:0.8});
     
     return {
         process: function(L, R) {
@@ -316,7 +316,7 @@ pico.play(demo());
           
           function oneliner() {
               var t = 0, dt = 8000 / pico.samplerate;
-              var delay = new pico.DelayNode({delayTime:225,feedback:.8});
+              var delay = new pico.DelayNode({time:225, feedback:0.8});
               
               return {
                   process: function(L, R) {

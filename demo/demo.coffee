@@ -63,7 +63,7 @@ class FMSynthLead extends ToneGenerator
         @fb   = 0
         @fblv = 0.3
         @env = new Envelope()
-        @delay = new pico.DelayNode(delayTime:225,feedback:0.35,wet:0.4)
+        @delay = new pico.DelayNode(time:225,feedback:0.35,wet:0.3)
 
     setFreq: (val)->
         @op[0].phaseStep = (1024 * val / @samplerate)
@@ -113,7 +113,7 @@ class PwmGenerator extends ToneGenerator
         @phase      = 0
         @phaseStep  = 0
         @width = 0.5
-        @delay = new pico.DelayNode(delayTime:75,feedback:0.2,wet:0.25)
+        @delay = new pico.DelayNode(time:75,feedback:0.2,wet:0.25)
 
     setFreq: (val)->
         @phaseStep = val / @samplerate
@@ -310,7 +310,6 @@ class MMLSequencer
     constructor: (mml)->
         @tracks = for mml in mml.split(';').filter((x)->x)
             new MMLTrack(mml)
-        # @tracks = [@tracks[0]]
         @cell   = new Float32Array(pico.cellsize)
 
     process: (L, R)->

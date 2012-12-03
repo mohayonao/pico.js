@@ -121,9 +121,9 @@
       this.fblv = 0.3;
       this.env = new Envelope();
       this.delay = new pico.DelayNode({
-        delayTime: 225,
+        time: 225,
         feedback: 0.35,
-        wet: 0.4
+        wet: 0.3
       });
     }
 
@@ -187,7 +187,7 @@
       this.phaseStep = 0;
       this.width = 0.5;
       this.delay = new pico.DelayNode({
-        delayTime: 75,
+        time: 75,
         feedback: 0.2,
         wet: 0.25
       });

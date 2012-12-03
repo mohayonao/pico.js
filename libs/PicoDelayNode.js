@@ -4,7 +4,7 @@
     function PicoDelayNode(opts) {
         var i, bits = Math.ceil(Math.log(pico.samplerate * 1.5) * Math.LOG2E);
         
-        this.delayTime = 125;
+        this.time = 125;
         this.feedback  = 0.25;
         
         this.bufferL = new Float32Array(1 << bits);
@@ -13,15 +13,15 @@
         this.wet     = 0.45;
         
         this.readIndex  = 0;
-        this.writeIndex = (this.delayTime / 1000 * pico.samplerate)|0;
+        this.writeIndex = (this.time / 1000 * pico.samplerate)|0;
         
         if (opts) this.setParams(opts);
     }
     
     PicoDelayNode.prototype.setParams = function(opts) {
-        if (opts.delayTime) {
-            this.delayTime = opts.delayTime;
-            this.writeIndex = this.readIndex + ((this.delayTime / 1000 * pico.samplerate)|0);
+        if (opts.time) {
+            this.time = opts.time;
+            this.writeIndex = this.readIndex + ((this.time / 1000 * pico.samplerate)|0);
         }
         if (opts.feedback) {
             this.feedback = opts.feedback;
