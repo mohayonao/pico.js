@@ -8,12 +8,14 @@
     <link rel="shortcut icon" href="./favicon.ico">
     <style>
       .header h1 {font-size:8em;line-height:1.2em;}
+      h1 {color:#00a497}
       h2 {margin:25px 0 15px}
       h2:before {content:"■ "}
       button {margin-left:2px}
       footer {margin-bottom:15px}
       #social_button{margin-top:15px}
-      #social_button>div{float:left;min-width:70px;}
+      #social_button>div{float:left;min-width:70px}
+      code {color:#007b43}
     </style>
   </head>
   <body>
@@ -77,7 +79,7 @@ pico.play(noise);
             </li>
             <li>
               <h4>追加クラスを使って Flash Player 経由で再生</h4>
-              <p><code style="color:green">&lt;script src="libs/PicoFlashPlayer.js"&gt;&lt/script&gt;</code></p>
+              <p><code>&lt;script src="libs/PicoFlashPlayer.js"&gt;&lt/script&gt;</code></p>
               <p>追加のスクリプトを読み込んだ後, <code>bind()</code> で実装クラスを指定します.</p>
               <p><code>pico.bind(pico.FlashPlayer,{src:"libs/PicoFlashPlayer.swf"})</code></p>
             </li>
