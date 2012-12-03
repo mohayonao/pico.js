@@ -170,16 +170,17 @@ pico.play(sinetone(880));
               <i class="icon-play"></i> Play
             </button>
           </h3>
-          <pre class="prettyprint lang-js">// 1行音楽
+          <pre class="prettyprint lang-js">// 1行の数式から音楽を作るやつ
 window.f1 = function(t) {
     return Math.sin(t*(0.001+Math.sin(t>>10)))*64;
 };
 window.f2 = function(t) {
-    return (t>>9)&((t<<5)|(Math.sin(t*1.4142)*3000));
+    return (t>>9)&((t<<5)|(Math.sin(t*1.4142)*3000))+(t>>3);
 };
 
 function oneliner() {
     var t = 0, dt = 8000 / pico.samplerate;
+    var delay = new pico.DelayNode({delayTime:225,feedback:.8});
     
     return {
         process: function(L, R) {
@@ -188,6 +189,7 @@ function oneliner() {
                 R[i] = (window.f2(t|0) % 256) / 512;
                 t += dt;
             }
+            delay.process(L, R);
         }
     };
 }
@@ -306,11 +308,12 @@ pico.play(demo());
               return Math.sin(t*(0.001+Math.sin(t>>10)))*64;
           };
           window.f2 = function(t) {
-              return (t>>9)&((t<<5)|(Math.sin(t*1.4142)*3000));
+              return (t>>9)&((t<<5)|(Math.sin(t*1.4142)*3000))+(t>>3);
           };
           
           function oneliner() {
               var t = 0, dt = 8000 / pico.samplerate;
+              var delay = new pico.DelayNode({delayTime:225,feedback:.8});
               
               return {
                   process: function(L, R) {
@@ -319,6 +322,7 @@ pico.play(demo());
                           R[i] = (window.f2(t|0) % 256) / 512;
                           t += dt;
                       }
+                      delay.process(L, R);
                   }
               };
           }
