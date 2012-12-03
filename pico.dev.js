@@ -75,26 +75,21 @@
                 var audio = new Audio();
                 var onaudioprocess;
                 var interleaved = new Float32Array(sys.streamsize * sys.channels);
-                var written = 0, limit = (sys.samplerate * 0.37152)|0;
+                var interval = sys.streamsize / sys.samplerate * 1000;
                 
                 onaudioprocess = function() {
-                    var offset = audio.mozCurrentSampleOffset(),
-                        inL = sys.strmL, inR = sys.strmR,
+                    var inL = sys.strmL, inR = sys.strmR,
                         i = interleaved.length, j = inL.length;
-                    
-                    if (offset > 0 && written > offset + limit) {
-                        return;
-                    }
                     sys.process();
                     while (j--) {
                         interleaved[--i] = inR[j];
                         interleaved[--i] = inL[j];
                     }
-                    written += audio.mozWriteAudio(interleaved);
+                    audio.mozWriteAudio(interleaved);
                 };
                 
                 audio.mozSetup(sys.channels, sys.samplerate);
-                timerId = setInterval(onaudioprocess, 20);
+                timerId = setInterval(onaudioprocess, interval);
             };
             
             this.pause = function() {
