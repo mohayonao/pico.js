@@ -184,11 +184,6 @@
       this.phase = 0;
       this.phaseStep = 0;
       this.width = 0.5;
-      this.delay = new pico.DelayNode({
-        time: 75,
-        feedback: 0.2,
-        wet: 0.25
-      });
     }
 
     PwmGenerator.prototype.setFreq = function(val) {
@@ -215,7 +210,6 @@
       }
       this.phase = phase;
       this.env.process(cell);
-      this.delay.process(cell);
       return cell;
     };
 

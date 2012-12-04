@@ -111,7 +111,6 @@ class PwmGenerator extends ToneGenerator
         @phase      = 0
         @phaseStep  = 0
         @width = 0.5
-        @delay = new pico.DelayNode(time:75,feedback:0.2,wet:0.25)
 
     setFreq: (val)->
         @phaseStep = val / @samplerate
@@ -131,7 +130,6 @@ class PwmGenerator extends ToneGenerator
             phase -= 1 while phase >= 1
         @phase = phase
         @env.process cell
-        @delay.process cell
         cell
 
 class NoiseGenerator extends ToneGenerator
