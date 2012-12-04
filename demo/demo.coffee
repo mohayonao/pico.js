@@ -44,8 +44,8 @@ class FMSynthBass extends ToneGenerator
         phaseStep1 = op[1].phaseStep
         amp1       = op[1].amp
         for i in [0...cell.length] by 1
-            x0 = fb = sinewave[(((phase0 + fb * fblv) + 65536)|0)%1024] * amp0
-            x1 = sinewave[(((phase1 + x0 * 1024) + 65536)|0)%1024] * amp1
+            x0 = fb = sinewave[(phase0 + fb * fblv) & 1023] * amp0
+            x1 = sinewave[(phase1 + x0 * 1024) & 1023] * amp1
             cell[i] = x1 * velocity
             phase0 += phaseStep0
             phase1 += phaseStep1
@@ -100,10 +100,10 @@ class FMSynthLead extends ToneGenerator
         phaseStep3 = op[3].phaseStep
         amp3       = op[3].amp
         for i in [0...cell.length] by 1
-            x0 = fb = sinewave[(((phase0 + fb * fblv) + 65536)|0)%1024] * amp0
-            x1 = sinewave[(((phase1 + x0 * 1024) + 65536)|0)%1024] * amp1
-            x2 = sinewave[((phase2)|0)%1024] * amp2
-            x3 = sinewave[(((phase3 + x2 * 1024) + 65536)|0)%1024] * amp3
+            x0 = fb = sinewave[(phase0 + fb * fblv) & 1023] * amp0
+            x1 = sinewave[(phase1 + x0 * 1024) & 1023] * amp1
+            x2 = sinewave[(phase2) & 1023] * amp2
+            x3 = sinewave[(phase3 + x2 * 1024) & 1023] * amp3
             cell[i] = (x1 + x3) * velocity
             phase0 += phaseStep0
             phase1 += phaseStep1
