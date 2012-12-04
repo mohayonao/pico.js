@@ -22,31 +22,37 @@ class FMSynthBass extends ToneGenerator
             {phase:0, phaseStep:0, amp:1}
         ]
         @fb   = 0
-        @fblv = 0.3
+        @fblv = 0.097
 
     setFreq: (val)->
         @op[0].phaseStep = (1024 * val / @samplerate) * 0.5
         @op[1].phaseStep = (1024 * val / @samplerate)
-        @op[0].amp = 1
+        @op[0].amp = 0.5
         @op[1].amp = 1
 
     process: ->
         cell = @cell
         op   = @op
-        [wave,velocity] = [@wave,@velocity]
-        [phase0,phaseStep0,amp0] = [op[0].phase,op[0].phaseStep,op[0].amp]
-        [phase1,phaseStep1,amp1] = [op[1].phase,op[1].phaseStep,op[1].amp]
-        [fb, fblv] = [@fb, @fblv]
+        wave = @wave
+        fb   = @fb
+        fblv = @fblv * 1024
+        velocity = @velocity * 0.15
+        phase0     = op[0].phase
+        phaseStep0 = op[0].phaseStep
+        amp0       = op[0].amp
+        phase1     = op[1].phase
+        phaseStep1 = op[1].phaseStep
+        amp1       = op[1].amp
         for i in [0...cell.length] by 1
-            x0 = fb = sinewave[((phase0 + fb * 100 + 65536)|0)%1024] * amp0
-            x1 = sinewave[((phase1 + x0 * 512 + 65536)|0)%1024] * amp1
-            cell[i] = x1 * 0.15 * velocity
+            x0 = fb = sinewave[(((phase0 + fb * fblv) + 65536)|0)%1024] * amp0
+            x1 = sinewave[(((phase1 + x0 * 1024) + 65536)|0)%1024] * amp1
+            cell[i] = x1 * velocity
             phase0 += phaseStep0
             phase1 += phaseStep1
         op[0].phase = phase0
         op[1].phase = phase1
         op[0].amp *= 0.995
-        @fb   = fb
+        @fb = fb
         cell
 
 class FMSynthLead extends ToneGenerator
@@ -77,18 +83,28 @@ class FMSynthLead extends ToneGenerator
     process: ->
         cell = @cell
         op   = @op
-        [wave,velocity] = [@wave,@velocity]
-        [phase0,phaseStep0,amp0] = [op[0].phase,op[0].phaseStep,op[0].amp]
-        [phase1,phaseStep1,amp1] = [op[1].phase,op[1].phaseStep,op[1].amp]
-        [phase2,phaseStep2,amp2] = [op[2].phase,op[2].phaseStep,op[2].amp]
-        [phase3,phaseStep3,amp3] = [op[3].phase,op[3].phaseStep,op[3].amp]
-        [fb, fblv] = [@fb, @fblv]
+        wave = @wave
+        fb   = @fb
+        fblv = @fblv * 1024
+        velocity = @velocity * 0.125
+        phase0     = op[0].phase
+        phaseStep0 = op[0].phaseStep
+        amp0       = op[0].amp
+        phase1     = op[1].phase
+        phaseStep1 = op[1].phaseStep
+        amp1       = op[1].amp
+        phase2     = op[2].phase
+        phaseStep2 = op[2].phaseStep
+        amp2       = op[2].amp
+        phase3     = op[3].phase
+        phaseStep3 = op[3].phaseStep
+        amp3       = op[3].amp
         for i in [0...cell.length] by 1
-            x0 = fb = sinewave[(((phase0 + fb * 1024 * fblv) + 65536)|0)%1024] * amp0
+            x0 = fb = sinewave[(((phase0 + fb * fblv) + 65536)|0)%1024] * amp0
             x1 = sinewave[(((phase1 + x0 * 1024) + 65536)|0)%1024] * amp1
             x2 = sinewave[((phase2)|0)%1024] * amp2
             x3 = sinewave[(((phase3 + x2 * 1024) + 65536)|0)%1024] * amp3
-            cell[i] = ((x1 + x3) * 0.125) * velocity
+            cell[i] = (x1 + x3) * velocity
             phase0 += phaseStep0
             phase1 += phaseStep1
             phase2 += phaseStep2
@@ -108,8 +124,8 @@ class PwmGenerator extends ToneGenerator
     constructor: ->
         super()
         @env = new Envelope()
-        @phase      = 0
-        @phaseStep  = 0
+        @phase     = 0
+        @phaseStep = 0
         @width = 0.5
 
     setFreq: (val)->
@@ -122,7 +138,9 @@ class PwmGenerator extends ToneGenerator
     process: ->
         cell = @cell
         width = @width
-        [phase,phaseStep,velocity] = [@phase,@phaseStep,@velocity]
+        phase = @phase
+        phaseStep = @phaseStep
+        velocity  = @velocity
         for i in [0...cell.length] by 1
             x = if phase < width then +0.1 else -0.1
             cell[i] = x * velocity
@@ -151,13 +169,16 @@ class NoiseGenerator extends ToneGenerator
 
     process: ->
         cell = @cell
-        [value, phase, phaseStep] = [@value, @phase, @phaseStep]
+        value = @value
+        phase = @phase
+        phaseStep = @phaseStep
+        velocity  = @velocity
         for i in [0...cell.length] by 1
             cell[i] = value * 0.1
             phase += phaseStep
             if phase >= 1
                 phase -= 1
-                value = Math.random() * @velocity
+                value = Math.random() * velocity
         @value = value
         @phase = phase
         @env.process cell
@@ -203,8 +224,9 @@ class Envelope
                     @samples = Infinity
                     @dx = 0
                     if @s is 0 then @x = 0
+        x = @x
         for i in [0...cell.length] by 1
-            cell[i] *= @x
+            cell[i] *= x
         @x += @dx
         @samples -= cell.length
 
@@ -314,7 +336,7 @@ class MMLSequencer
             cell[i] = 0
         for track in @tracks
             tmp = track.process()
-            if tmp then for i in [0...cell.length]
+            if tmp then for i in [0...cell.length] by 1
                 cell[i] += tmp[i]
         for i in [0...cell.length] by 1
             L[i] = R[i] = cell[i]

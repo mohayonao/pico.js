@@ -54,28 +54,34 @@
         }
       ];
       this.fb = 0;
-      this.fblv = 0.3;
+      this.fblv = 0.097;
     }
 
     FMSynthBass.prototype.setFreq = function(val) {
       this.op[0].phaseStep = (1024 * val / this.samplerate) * 0.5;
       this.op[1].phaseStep = 1024 * val / this.samplerate;
-      this.op[0].amp = 1;
+      this.op[0].amp = 0.5;
       return this.op[1].amp = 1;
     };
 
     FMSynthBass.prototype.process = function() {
-      var amp0, amp1, cell, fb, fblv, op, phase0, phase1, phaseStep0, phaseStep1, velocity, wave, x0, x1, _i, _ref, _ref1, _ref2, _ref3, _ref4;
+      var amp0, amp1, cell, fb, fblv, op, phase0, phase1, phaseStep0, phaseStep1, velocity, wave, x0, x1, _i, _ref;
       cell = this.cell;
       op = this.op;
-      _ref = [this.wave, this.velocity], wave = _ref[0], velocity = _ref[1];
-      _ref1 = [op[0].phase, op[0].phaseStep, op[0].amp], phase0 = _ref1[0], phaseStep0 = _ref1[1], amp0 = _ref1[2];
-      _ref2 = [op[1].phase, op[1].phaseStep, op[1].amp], phase1 = _ref2[0], phaseStep1 = _ref2[1], amp1 = _ref2[2];
-      _ref3 = [this.fb, this.fblv], fb = _ref3[0], fblv = _ref3[1];
-      for (i = _i = 0, _ref4 = cell.length; _i < _ref4; i = _i += 1) {
-        x0 = fb = sinewave[((phase0 + fb * 100 + 65536) | 0) % 1024] * amp0;
-        x1 = sinewave[((phase1 + x0 * 512 + 65536) | 0) % 1024] * amp1;
-        cell[i] = x1 * 0.15 * velocity;
+      wave = this.wave;
+      fb = this.fb;
+      fblv = this.fblv * 1024;
+      velocity = this.velocity * 0.15;
+      phase0 = op[0].phase;
+      phaseStep0 = op[0].phaseStep;
+      amp0 = op[0].amp;
+      phase1 = op[1].phase;
+      phaseStep1 = op[1].phaseStep;
+      amp1 = op[1].amp;
+      for (i = _i = 0, _ref = cell.length; _i < _ref; i = _i += 1) {
+        x0 = fb = sinewave[(((phase0 + fb * fblv) + 65536) | 0) % 1024] * amp0;
+        x1 = sinewave[(((phase1 + x0 * 1024) + 65536) | 0) % 1024] * amp1;
+        cell[i] = x1 * velocity;
         phase0 += phaseStep0;
         phase1 += phaseStep1;
       }
@@ -138,21 +144,31 @@
     };
 
     FMSynthLead.prototype.process = function() {
-      var amp0, amp1, amp2, amp3, cell, fb, fblv, op, phase0, phase1, phase2, phase3, phaseStep0, phaseStep1, phaseStep2, phaseStep3, velocity, wave, x0, x1, x2, x3, _i, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6;
+      var amp0, amp1, amp2, amp3, cell, fb, fblv, op, phase0, phase1, phase2, phase3, phaseStep0, phaseStep1, phaseStep2, phaseStep3, velocity, wave, x0, x1, x2, x3, _i, _ref;
       cell = this.cell;
       op = this.op;
-      _ref = [this.wave, this.velocity], wave = _ref[0], velocity = _ref[1];
-      _ref1 = [op[0].phase, op[0].phaseStep, op[0].amp], phase0 = _ref1[0], phaseStep0 = _ref1[1], amp0 = _ref1[2];
-      _ref2 = [op[1].phase, op[1].phaseStep, op[1].amp], phase1 = _ref2[0], phaseStep1 = _ref2[1], amp1 = _ref2[2];
-      _ref3 = [op[2].phase, op[2].phaseStep, op[2].amp], phase2 = _ref3[0], phaseStep2 = _ref3[1], amp2 = _ref3[2];
-      _ref4 = [op[3].phase, op[3].phaseStep, op[3].amp], phase3 = _ref4[0], phaseStep3 = _ref4[1], amp3 = _ref4[2];
-      _ref5 = [this.fb, this.fblv], fb = _ref5[0], fblv = _ref5[1];
-      for (i = _i = 0, _ref6 = cell.length; _i < _ref6; i = _i += 1) {
-        x0 = fb = sinewave[(((phase0 + fb * 1024 * fblv) + 65536) | 0) % 1024] * amp0;
+      wave = this.wave;
+      fb = this.fb;
+      fblv = this.fblv * 1024;
+      velocity = this.velocity * 0.125;
+      phase0 = op[0].phase;
+      phaseStep0 = op[0].phaseStep;
+      amp0 = op[0].amp;
+      phase1 = op[1].phase;
+      phaseStep1 = op[1].phaseStep;
+      amp1 = op[1].amp;
+      phase2 = op[2].phase;
+      phaseStep2 = op[2].phaseStep;
+      amp2 = op[2].amp;
+      phase3 = op[3].phase;
+      phaseStep3 = op[3].phaseStep;
+      amp3 = op[3].amp;
+      for (i = _i = 0, _ref = cell.length; _i < _ref; i = _i += 1) {
+        x0 = fb = sinewave[(((phase0 + fb * fblv) + 65536) | 0) % 1024] * amp0;
         x1 = sinewave[(((phase1 + x0 * 1024) + 65536) | 0) % 1024] * amp1;
         x2 = sinewave[(phase2 | 0) % 1024] * amp2;
         x3 = sinewave[(((phase3 + x2 * 1024) + 65536) | 0) % 1024] * amp3;
-        cell[i] = ((x1 + x3) * 0.125) * velocity;
+        cell[i] = (x1 + x3) * velocity;
         phase0 += phaseStep0;
         phase1 += phaseStep1;
         phase2 += phaseStep2;
@@ -196,11 +212,13 @@
     };
 
     PwmGenerator.prototype.process = function() {
-      var cell, phase, phaseStep, velocity, width, x, _i, _ref, _ref1;
+      var cell, phase, phaseStep, velocity, width, x, _i, _ref;
       cell = this.cell;
       width = this.width;
-      _ref = [this.phase, this.phaseStep, this.velocity], phase = _ref[0], phaseStep = _ref[1], velocity = _ref[2];
-      for (i = _i = 0, _ref1 = cell.length; _i < _ref1; i = _i += 1) {
+      phase = this.phase;
+      phaseStep = this.phaseStep;
+      velocity = this.velocity;
+      for (i = _i = 0, _ref = cell.length; _i < _ref; i = _i += 1) {
         x = phase < width ? +0.1 : -0.1;
         cell[i] = x * velocity;
         phase += phaseStep;
@@ -242,15 +260,18 @@
     };
 
     NoiseGenerator.prototype.process = function() {
-      var cell, phase, phaseStep, value, _i, _ref, _ref1;
+      var cell, phase, phaseStep, value, velocity, _i, _ref;
       cell = this.cell;
-      _ref = [this.value, this.phase, this.phaseStep], value = _ref[0], phase = _ref[1], phaseStep = _ref[2];
-      for (i = _i = 0, _ref1 = cell.length; _i < _ref1; i = _i += 1) {
+      value = this.value;
+      phase = this.phase;
+      phaseStep = this.phaseStep;
+      velocity = this.velocity;
+      for (i = _i = 0, _ref = cell.length; _i < _ref; i = _i += 1) {
         cell[i] = value * 0.1;
         phase += phaseStep;
         if (phase >= 1) {
           phase -= 1;
-          value = Math.random() * this.velocity;
+          value = Math.random() * velocity;
         }
       }
       this.value = value;
@@ -289,7 +310,7 @@
     };
 
     Envelope.prototype.process = function(cell) {
-      var _i, _ref;
+      var x, _i, _ref;
       while (this.samples <= 0) {
         switch (this.status) {
           case 0:
@@ -316,8 +337,9 @@
             }
         }
       }
+      x = this.x;
       for (i = _i = 0, _ref = cell.length; _i < _ref; i = _i += 1) {
-        cell[i] *= this.x;
+        cell[i] *= x;
       }
       this.x += this.dx;
       return this.samples -= cell.length;
@@ -500,7 +522,7 @@
         track = _ref1[_j];
         tmp = track.process();
         if (tmp) {
-          for (i = _k = 0, _ref2 = cell.length; 0 <= _ref2 ? _k < _ref2 : _k > _ref2; i = 0 <= _ref2 ? ++_k : --_k) {
+          for (i = _k = 0, _ref2 = cell.length; _k < _ref2; i = _k += 1) {
             cell[i] += tmp[i];
           }
         }
