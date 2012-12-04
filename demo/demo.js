@@ -496,7 +496,7 @@
     }
 
     MMLSequencer.prototype.process = function(L, R) {
-      var cell, tmp, track, _i, _j, _k, _l, _len, _ref, _ref1, _ref2, _ref3, _results;
+      var cell, tmp, track, _i, _j, _k, _l, _len, _ref, _ref1, _ref2, _ref3;
       cell = this.cell;
       for (i = _i = 0, _ref = cell.length; _i < _ref; i = _i += 1) {
         cell[i] = 0;
@@ -511,11 +511,10 @@
           }
         }
       }
-      _results = [];
       for (i = _l = 0, _ref3 = cell.length; _l < _ref3; i = _l += 1) {
-        _results.push(L[i] = R[i] = cell[i]);
+        L[i] = R[i] = cell[i];
       }
-      return _results;
+      return void 0;
     };
 
     return MMLSequencer;

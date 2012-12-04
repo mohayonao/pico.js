@@ -320,6 +320,7 @@ class MMLSequencer
                 cell[i] += tmp[i]
         for i in [0...cell.length] by 1
             L[i] = R[i] = cell[i]
+        undefined
 
 MMLCommands = [
     { re:/@e1,(\d+,\d+,\d+,\d+)/g, func:(m)->
