@@ -211,12 +211,15 @@
         var generator = this.generator;
         var i, imax = cellL.length;
         var j = 0, n = this.streamsize / this.cellsize;
+        var x;
         
         while (n--) {
             generator.process(cellL, cellR);
             for (i = 0; i < imax; ++i, ++j) {
-                strmL[j] = cellL[i];
-                strmR[j] = cellR[i];
+                x = cellL[i];
+                strmL[j] = (x < -1) ? -1 : (x > 1) ? 1 : x;
+                x = cellR[i];
+                strmR[j] = (x < -1) ? -1 : (x > 1) ? 1 : x;
             }
         }
     };
