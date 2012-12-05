@@ -14,7 +14,7 @@
             initialize(opts);
         }
         
-        this.defaultSamplerate = 24000;
+        this.defaultSamplerate = 22050;
         this.env = "flash";
         
         this.play = function() {
