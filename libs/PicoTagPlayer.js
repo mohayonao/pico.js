@@ -4,8 +4,10 @@
     function PicoTagPlayer(sys, opts) {
         var timerId = 0;
         
+        opts = opts || {};
+        
         var bits = opts.bits === 1 ? 1 : 2;
-        this.defaultSamplerate = 44100;
+        this.defaultSamplerate = 22050;
         this.env = "tag";
         
         this.play = function() {

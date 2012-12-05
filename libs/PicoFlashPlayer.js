@@ -11,7 +11,7 @@
                 console.warn("PicoFlashPlayer requires Flash Player 10.");
                 return;
             }
-            initialize(opts);
+            initialize(opts || {});
         }
         
         this.defaultSamplerate = 22050;
