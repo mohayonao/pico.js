@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
   <head>
     <meta charset="utf-8">
     <title>pico.js - Simple interface for a real-time audio processing</title>
@@ -22,29 +22,29 @@
     <div class="container">
       <div class="header">
         <h1>pico.js</h1>
-        <p><small>Simple interface for a real-time audio processing</small></p>
+        <p><small>リアルタイムに信号処理を行なうための簡易インターフェイス</small></p>
       </div>
       
       <div class="pull-right">
-        <a href="./index-ja.html">日本語</a>
+        <a href="./">English</a>
       </div>
       
-      <h2>USAGE</h2>
+      <h2>使い方</h2>
       <div class="row">
         <div class="span6">
-          <h3>Tutorial</h3>
+          <h3>基本</h3>
           <ol>
             <li>
-              <h4>Make an object implemented a function <code>process(L, R)</code></h4>
-              <p>Arguments L and R are instanceof Float32Array</p>
+              <h4>関数 <code>process(L, R)</code> の定義されたオブジェクトを用意</h4>
+              <p>L と R の型は Float32Array です</p>
             </li>
             <li>
-              <h4>Start processing: <code>pico.play(gen);</code></h4>
-              <p>Write signal into L and R in function <code>process(L, R)</code></p>
+              <h4><code>pico.play(gen);</code> で処理開始</h4>
+              <p>1 の <code>process(L, R)</code> が呼ばれるので L と R に信号を書き込みます</p>
             </li>
             <li>
-              <h4>Stop processing: <code>pico.pause();</code></h4>
-              <p>The silence come</p>
+              <h4><code>pico.pause();</code> で処理停止</h4>
+              <p>静寂に戻るまでが音楽です</p>
             </li>
           </ol>
         </div>
@@ -58,7 +58,7 @@
               <i class="icon-play"></i> Play
             </button>
           </h3>
-          <pre class="prettyprint lang-js">// Generate whitenoise
+          <pre class="prettyprint lang-js">// ホワイトノイズを出力する
 var noise = {
     process: function(L, R) {
         for (var i = 0; i < L.length; i++) {
@@ -74,22 +74,22 @@ pico.play(noise);
       
       <div class="row">
         <div class="span6">
-          <h3>Others features</h3>
+          <h3>その他の便利な機能</h3>
           <ol>
             <li>
-              <h4>Change the samplerate</h4>
+              <h4>サンプリングレートの変更</h4>
               <p><code>pico.setup({samplerate:24000})</code></p>
-              <p>You can choose some one [8000, 11025, 12000, 16000, 22050, 24000, 32000, 44100, 48000]</p>
+              <p>サンプリングレートは 8000, 11025, 12000, 16000, 22050, 24000, 32000, 44100, 48000 のいずれかを指定してください</p>
             </li>
             <li>
-              <h4>via Flash Player (Optional)</h4>
+              <h4>追加クラスを使って Flash Player 経由で再生</h4>
               <p><code>&lt;script src="libs/PicoFlashPlayer.js"&gt;&lt/script&gt;</code></p>
-              <p>and</p>
+              <p>追加のスクリプトを読み込んだ後, <code>bind()</code> で実装クラスを指定します.</p>
               <p><code>pico.bind(pico.FlashPlayer,{src:"libs/PicoFlashPlayer.swf"})</code></p>
             </li>
             <li>
-              <h4>for node.js on Mac</h4>
-              <p>SEE: repository demo/node-demo.js</p>
+              <h4>Macの場合 node.js でも使えます</h4>
+              <p>詳しくは, リポジトリ内 demo/node-demo.js を参照してください.</p>
             </li>
           </ol>
         </div>
@@ -103,7 +103,7 @@ pico.play(noise);
               <i class="icon-play"></i> Play
             </button>
           </h3>
-          <pre class="prettyprint lang-js">// Generate sinetone
+          <pre class="prettyprint lang-js">// サイントーンを出力する
 function sinetone(freq) {
     var phase = 0,
         phaseStep = freq / pico.samplerate;
@@ -121,49 +121,49 @@ pico.play(sinetone(880));
         </div>
       </div>
 
-      <h2>REFERENCE</h2>
+      <h2>リファレンス</h2>
       <div class="row">
         <div class="span6">
-          <h3>Methods</h3>
+          <h3>メソッド</h3>
           <ol>
             <li>
               <h4><code>pico.play(gen)</code></h4>
-              <p>Start processing</p>
+              <p>再生を開始する</p>
             </li>
             <li>
               <h4><code>pico.pause()</code></h4>
-              <p>Stop processing</p>
+              <p>再生を停止する</p>
             </li>
             <li>
               <h4><code>pico.setup(opts)</code></h4>
-              <p>Setup samplerate or cellsize</p>
+              <p>サンプリングレート, cellsize を設定する</p>
             </li>
             <li>
               <h4><code>pico.bind(PlayerClass, opts)</code></h4>
-              <p>Use another PlayerClass (for example via Flash)</p>
+              <p>プレイヤー実装クラスを使用する</p>
             </li>
           </ol>
-          <h3>Properties</h3>
+          <h3>プロパティ</h3>
           <ul>
             <li>
               <h4><code>pico.isPlaying</code></h4>
-              <p>Return true if processing</p>
+              <p>処理中かどうかを返す</p>
             </li>
             <li>
               <h4><code>pico.env</code></h4>
-              <p>Return environment (webkit, moz, nop=no operation)</p>
+              <p>実行環境を返す (webkit, moz, nop=利用できない)</p>
             </li>
             <li>
               <h4><code>pico.samplerate</code></h4>
-              <p>Return samplerate</p>
+              <p>サンプリングレートを返す</p>
             </li>
             <li>
               <h4><code>pico.channels</code></h4>
-              <p>Return channels (always return 2)</p>
+              <p>チャンネル数を返す (2で固定)</p>
             </li>
             <li>
               <h4><code>pico.cellsize</code></h4>
-              <p>Return length of samples to be processed</p>
+              <p>関数 <code>process</code> で処理するサンプル数を返す</p>
             </li>
           </ul>
         </div>
@@ -177,7 +177,7 @@ pico.play(sinetone(880));
               <i class="icon-play"></i> Play
             </button>
           </h3>
-          <pre class="prettyprint lang-js">// Generate music from one-liner function
+          <pre class="prettyprint lang-js">// 1行の数式から音楽を作るやつ
 window.f1 = function(t) {
     return Math.sin(t*(0.001+Math.sin(t>>10)))*64;
 };
@@ -205,17 +205,17 @@ pico.play(oneliner());
         </div>
       </div>
       
-      <h2>OTHERS</h2>
+      <h2>その他</h2>
       <div class="row">
         <div class="span6">
-          <h3>Source</h3>
+          <h3>ソースコード</h3>
           <ul>
             <li><a href="./pico.js">pico.js</a> (minified)</li>
             <li><a href="./pico.dev.js">pico.dev.js</a> (uncompressed)</li>
             <li><a href="https://github.com/mohayonao/pico.js" target="github">Hosted on GitHub</a></li>
           </ul>
           
-          <h3>License</h3>
+          <h3>ライセンス</h3>
           <ul><li>MIT</li></ul>
           
           <div id="social_button">
@@ -232,7 +232,7 @@ pico.play(oneliner());
             </div>
             <div>
               <div id="fb-root"></div>
-              <script>(function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(d.getElementById(id))return;js=d.createElement(s);js.id=id;js.src="//connect.facebook.net/en_US/all.js#xfbml=1";fjs.parentNode.insertBefore(js,fjs);}(document,'script','facebook-jssdk'));</script>
+              <script>(function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(d.getElementById(id))return;js=d.createElement(s);js.id=id;js.src="//connect.facebook.net/ja_JP/all.js#xfbml=1";fjs.parentNode.insertBefore(js,fjs);}(document,'script','facebook-jssdk'));</script>
               <div class="fb-like" data-send="false" data-layout="button_count" data-width="450" data-show-faces="false"></div>
             </div>            
           </div>
@@ -248,11 +248,11 @@ pico.play(oneliner());
               <i class="icon-play"></i> Play
             </button>
           </h3>
-          <pre class="prettyprint lang-js">// Demo song of MML and FM synthesis
+          <pre class="prettyprint lang-js">// MMLと簡単なFM音源のデモ
 // TO MAKE THE END OF BATTLE/Ys2
 //     Copyright&copy;　Nihon Falcom Corporation
 // 
-// Original MML Data
+// 元データには以下のデータを使わせていただきました
 // http://d.hatena.ne.jp/mosshm/20071013/p1
 
 pico.play(demo());
