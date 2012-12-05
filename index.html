@@ -10,7 +10,8 @@
       .header h1 {font-size:8em;line-height:1.2em;}
       h1 {color:#00a497}
       h2 {margin:25px 0 15px}
-      h2:before {content:"■ "}
+      h2:before {content:"- "}
+      p {margin:4px 0}
       button {margin-left:2px}
       footer {margin-bottom:15px}
       #social_button{margin-top:15px}
@@ -40,7 +41,7 @@
             </li>
             <li>
               <h4>Start processing: <code>pico.play(gen);</code></h4>
-              <p>Write signal into L and R in function <code>process(L, R)</code></p>
+              <p>Write signal into L and R in the <code>gen.process(L, R)</code></p>
             </li>
             <li>
               <h4>Stop processing: <code>pico.pause();</code></h4>
@@ -83,6 +84,7 @@ pico.play(noise);
             </li>
             <li>
               <h4>via Flash Player (Optional)</h4>
+              <p>Load a script</p>
               <p><code>&lt;script src="libs/PicoFlashPlayer.js"&gt;&lt/script&gt;</code></p>
               <p>and</p>
               <p><code>pico.bind(pico.FlashPlayer,{src:"libs/PicoFlashPlayer.swf"})</code></p>

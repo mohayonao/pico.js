@@ -10,7 +10,8 @@
       .header h1 {font-size:8em;line-height:1.2em;}
       h1 {color:#00a497}
       h2 {margin:25px 0 15px}
-      h2:before {content:"■ "}
+      h2:before {content:"- "}
+      p {margin:4px 0}
       button {margin-left:2px}
       footer {margin-bottom:15px}
       #social_button{margin-top:15px}
@@ -40,7 +41,7 @@
             </li>
             <li>
               <h4><code>pico.play(gen);</code> で処理開始</h4>
-              <p>1 の <code>process(L, R)</code> が呼ばれるので L と R に信号を書き込みます</p>
+              <p><code>gen.process(L, R)</code> が呼ばれるので L と R に信号を書き込みます</p>
             </li>
             <li>
               <h4><code>pico.pause();</code> で処理停止</h4>
