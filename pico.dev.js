@@ -66,7 +66,12 @@
     } else if (typeof Audio === "function" &&
                typeof (new Audio()).mozSetup === "function") {
         ImplClass = function(sys) {
-            var timerId = 0;
+            var timer = (function() {
+                var source = "var t=0;onmessage=function(e){if(t)t=clearInterval(t),0;if(typeof e.data=='number'&&e.data>0)t=setInterval(function(){postMessage(0);},e.data);};";
+                var blob = new Blob([source], {type:"text/javascript"});
+                var path = URL.createObjectURL(blob);
+                return new Worker(path);
+            })();
             
             this.defaultSamplerate = 48000;
             this.env = "moz";
@@ -89,14 +94,12 @@
                 };
                 
                 audio.mozSetup(sys.channels, sys.samplerate);
-                timerId = setInterval(onaudioprocess, interval);
+                timer.onmessage = onaudioprocess;
+                timer.postMessage(interval);
             };
             
             this.pause = function() {
-                if (timerId !== 0) {
-                    clearInterval(timerId);
-                    timerId = 0;
-                }
+                timer.postMessage(0);
             };
         };
     } else {
