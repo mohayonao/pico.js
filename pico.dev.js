@@ -118,7 +118,7 @@
     function SoundSystem(opts) {
         this.impl = null;
         this.isPlaying  = false;
-        this.samplerate = 44100;
+        this.samplerate = 48000;
         this.channels   = 2;
         this.cellsize   = 128;
         this.streammsec = 20;
