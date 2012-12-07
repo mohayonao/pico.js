@@ -68,7 +68,7 @@
         ImplClass = function(sys) {
             var timerId = 0;
             
-            this.defaultSamplerate = 44100;
+            this.defaultSamplerate = 48000;
             this.env = "moz";
             
             this.play = function() {
