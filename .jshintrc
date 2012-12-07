@@ -2,5 +2,5 @@
     "newcap" : false,
     "browser": true,
     "node"   : true,
-    "predef" : ["pico","webkitAudioContext","ActiveXObject"]
+    "predef" : ["pico","URL","webkitAudioContext","ActiveXObject"]
 }
