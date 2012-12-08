@@ -1,12 +1,19 @@
 /**
- * Mac版の node.js 用のデモです.
- * node-macaudio をインストールすると,
- * node.js用プレイヤー実装クラス PicoNodePlayer が使用可能になります.
+ * Demo for node.js (cross-platform)
  * 
- * npm install macaudio
+ * dependencies
+ * ============
+ * - node-speaker
+ *   Output raw PCM audio data to the speakers 
+ *   https://github.com/TooTallNate/node-speaker
  *
- * node-macaudio 
- * https://github.com/mohayonao/node-macaudio
+ *   npm install speaker
+ *
+ * node v0.8.x compat
+ * - readable-stream
+ *   https://github.com/isaacs/readable-stream
+ *
+ *   npm install readable-stream
  */
 
 var pico = require("../pico");
