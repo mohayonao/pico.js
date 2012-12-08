@@ -3,8 +3,10 @@ pico.js
 
 Simple interface for a real-time audio processing
 
-[GitHub Pages](http://mohayonao.github.com/pico.js) / [日本語](http://mohayonao.github.com/pico.js/index-ja.html)
+### Reference/Demo ###
+[English](http://mohayonao.github.com/pico.js) / [日本語](http://mohayonao.github.com/pico.js/index-ja.html)
 
+### Change log ###
 
 2012 12 07 - **0.0.2**
 
