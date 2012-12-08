@@ -1,54 +1,52 @@
 "use strict";
 
-var macaudio = require("macaudio");
+var Readable = require("stream").Readable;
+
+// node-speaker
+//   Output raw PCM audio data to the speakers 
+//   https://github.com/TooTallNate/node-speaker
+//   npm install speaker
+var Speaker = require("speaker");
+
+// node v0.8.x compat
+// readable-stream
+//   https://github.com/isaacs/readable-stream
+//   npm install readable-stream
+if (!Readable) Readable = require("readable-stream/readable");
 
 function PicoNodePlayer(sys) {
-    var node = new macaudio.JavaScriptOutputNode(sys.streamsize);
     
-    this.defaultSamplerate = node.sampleRate;
+    this.defaultSamplerate = 44100;
     this.env = "node";
+    this.node = null;
     
     this.play = function() {
-        var onaudioprocess, x, dx;
-        
-        if (sys.samplerate === node.sampleRate) {
-            onaudioprocess = function(e) {
-                var inL = sys.strmL, inR = sys.strmR,
-                    outL = e.getChannelData(0),
-                    outR = e.getChannelData(1),
-                    i = e.bufferSize;
+        this.node = new Readable();
+        this.node._read = function(n, fn) {
+            var inL = sys.strmL, inR = sys.strmR;
+            var buf = new Buffer(n);
+            
+            var i, j = 0;
+            var imax = inL.length;
+            
+            n = (n >> 2) / sys.streamsize;
+            while (n--) {
                 sys.process();
-                while (i--) {
-                    outL[i] = inL[i];
-                    outR[i] = inR[i];
-                }
-            };
-        } else {
-            x  = sys.streamsize;
-            dx = sys.samplerate / node.sampleRate;
-            onaudioprocess = function(e) {
-                var inL = sys.strmL, inR = sys.strmR,
-                    outL = e.getChannelData(0),
-                    outR = e.getChannelData(1),
-                    streamsize = sys.streamsize,
-                    i, imax = e.bufferSize;
                 for (i = 0; i < imax; ++i) {
-                    if (x >= streamsize) {
-                        sys.process();
-                        x -= streamsize;
-                    }
-                    outL[i] = inL[x|0];
-                    outR[i] = inR[x|0];
-                    x += dx;
+                    buf.writeInt16LE((inL[i] * 32760)|0, j);
+                    j += 2;
+                    buf.writeInt16LE((inR[i] * 32760)|0, j);
+                    j += 2;
                 }
-            };
-        }
-        node.onaudioprocess = onaudioprocess;
-        node.start();
+            }
+            
+            fn(null, buf);
+        };
+        this.node.pipe(new Speaker({sampleRate:sys.samplerate}));
     };
     
     this.pause = function() {
-        node.stop();
+        process.nextTick(this.node.emit.bind(this.node, "end"));
     };
 }
 
