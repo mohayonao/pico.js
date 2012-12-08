@@ -16,6 +16,7 @@
       footer {margin-bottom:15px}
       #social_button{margin-top:15px}
       #social_button>div{float:left;min-width:70px}
+      #env li {display:inline}
       code {color:#007b43}
     </style>
   </head>
@@ -23,11 +24,30 @@
     <div class="container">
       <div class="header">
         <h1>pico.js</h1>
-        <p><small>リアルタイムに信号処理を行なうための簡易インターフェイス</small></p>
       </div>
       
       <div class="pull-right">
         <a href="./">English</a>
+      </div>
+      <hr/>
+
+      <h2>紹介</h2>
+      <div class="row">
+        <div class="span6">
+          <h3>これは何？</h3>
+          <p>JavaScriptでリアルタイム信号処理を行なうための簡易インターフェイスです.</p>
+        </div>
+        <div class="span6">
+          <h3>使える環境</h3>
+          <ul id="env">
+            <li><img src="misc/chrome.png" title="chrome"></li>
+            <li><img src="misc/safari.png" title="safari"></li>
+            <li><img src="misc/firefox.png" title="firefox"></li>
+            <li><img src="misc/opera.png" title="opera"></li>
+            <li><img src="misc/ie.png" title="IE9"></li>
+            <li><img src="misc/nodejs.png" title="node.js"></li>
+          </ul>
+        </div>
       </div>
       
       <h2>使い方</h2>
@@ -89,8 +109,8 @@ pico.play(noise);
               <p><code>pico.bind(pico.FlashPlayer,{src:"libs/PicoFlashPlayer.swf"})</code></p>
             </li>
             <li>
-              <h4>Macの場合 node.js でも使えます</h4>
-              <p>詳しくは, リポジトリ内 demo/node-demo.js を参照してください.</p>
+              <h4>node.jsで再生</h4>
+              <p>詳しくは, リポジトリ内 <a href="https://github.com/mohayonao/pico.js/blob/master/demo/node-demo.js">demo/node-demo.js</a> を参照してください.</p>
             </li>
           </ol>
         </div>

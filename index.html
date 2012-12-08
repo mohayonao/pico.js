@@ -16,6 +16,7 @@
       footer {margin-bottom:15px}
       #social_button{margin-top:15px}
       #social_button>div{float:left;min-width:70px}
+      #env li {display:inline}
       code {color:#007b43}
     </style>
   </head>
@@ -23,11 +24,30 @@
     <div class="container">
       <div class="header">
         <h1>pico.js</h1>
-        <p><small>Simple interface for a real-time audio processing</small></p>
       </div>
       
       <div class="pull-right">
         <a href="./index-ja.html">日本語</a>
+      </div>
+      <hr/>
+      
+      <h2>INTRODUCTION</h2>
+      <div class="row">
+        <div class="span6">
+          <h3>What is?</h3>
+          <p>A JavaScript libray for real-time audio processing</p>
+        </div>
+        <div class="span6">
+          <h3>Support</h3>
+          <ul id="env">
+            <li><img src="misc/chrome.png" title="chrome"></li>
+            <li><img src="misc/safari.png" title="safari"></li>
+            <li><img src="misc/firefox.png" title="firefox"></li>
+            <li><img src="misc/opera.png" title="opera"></li>
+            <li><img src="misc/ie.png" title="IE9"></li>
+            <li><img src="misc/nodejs.png" title="node.js"></li>
+          </ul>
+        </div>
       </div>
       
       <h2>USAGE</h2>
@@ -41,7 +61,7 @@
             </li>
             <li>
               <h4>Start processing: <code>pico.play(gen);</code></h4>
-              <p>Write signal into L and R in the <code>gen.process(L, R)</code></p>
+              <p>Write signal into L and R in <code>gen.process(L, R)</code></p>
             </li>
             <li>
               <h4>Stop processing: <code>pico.pause();</code></h4>
@@ -91,7 +111,7 @@ pico.play(noise);
             </li>
             <li>
               <h4>for node.js on Mac</h4>
-              <p>SEE: repository demo/node-demo.js</p>
+              <p>See: repository <a href="https://github.com/mohayonao/pico.js/blob/master/demo/node-demo.js">demo/node-demo.js</a></p>
             </li>
           </ol>
         </div>
@@ -138,7 +158,7 @@ pico.play(sinetone(880));
             </li>
             <li>
               <h4><code>pico.setup(opts)</code></h4>
-              <p>Setup samplerate or cellsize</p>
+              <p>Setup samplerate and cellsize</p>
             </li>
             <li>
               <h4><code>pico.bind(PlayerClass, opts)</code></h4>
