@@ -1,6 +1,6 @@
 {
     "name": "pico.js",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "description": "Simple interface for a real-time audio processing",
     "author": "nao yonamine <mohayonao@gmail.com>",
     "repository": {
