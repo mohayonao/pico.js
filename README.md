@@ -3,10 +3,14 @@ pico.js
 
 Simple interface for a real-time audio processing
 
-### Reference / Demo ###
-[English](http://mohayonao.github.com/pico.js) | [日本語](http://mohayonao.github.com/pico.js/index-ja.html)
+Reference and Demo
+------------------
 
-### Installation ###
+[English](http://mohayonao.github.com/pico.js/) | [日本語](http://mohayonao.github.com/pico.js/index-ja.html)
+
+Installation
+------------
+
 #### browser ####
 ````html
 <script src="pico.js"></script>
@@ -17,7 +21,29 @@ Simple interface for a real-time audio processing
 $ npm install node-pico
 ```
 
-### Change log ###
+Example
+-------
+
+```javascript
+var pico = require("node-pico");
+
+function sinetone(freq) {
+    var phase = 0,
+        phaseStep = freq / pico.samplerate;
+    return {
+        process: function(L, R) {
+            for (var i = 0; i < L.length; i++) {
+                L[i] = R[i] = Math.sin(6.28318 * phase) * 0.25;
+                phase += phaseStep;
+            }
+        }
+    };
+}
+pico.play(sinetone(880));
+```
+
+Change log
+----------
 
 2012 12 08 - **0.0.3**
 
