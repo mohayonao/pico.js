@@ -1,5 +1,5 @@
 {
-    "name": "pico.js",
+    "name": "node-pico",
     "version": "0.0.3",
     "description": "Simple interface for a real-time audio processing",
     "author": "nao yonamine <mohayonao@gmail.com>",
@@ -7,11 +7,15 @@
         "type": "git",
         "url": "https://github.com/mohayonao/pico.js.git"
     },
-    "main": "pico.js",
+    "main": "index.js",
     "licenses": [
         { "type": "MIT",
           "url" : "https://raw.github.com/mohayonao/pico.js/master/LICENSE" }
     ],
+    "dependencies": {
+        "speaker": ">=0.0.5",
+        "readable-stream": ">=0.0.4"
+    },
     "devDependencies": {
         "uglify-js": "*",
         "jshint"   : "*"

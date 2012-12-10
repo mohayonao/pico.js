@@ -3,8 +3,19 @@ pico.js
 
 Simple interface for a real-time audio processing
 
-### Reference/Demo ###
-[English](http://mohayonao.github.com/pico.js) / [日本語](http://mohayonao.github.com/pico.js/index-ja.html)
+### Reference / Demo ###
+[English](http://mohayonao.github.com/pico.js) | [日本語](http://mohayonao.github.com/pico.js/index-ja.html)
+
+### Installation ###
+#### browser ####
+````html
+<script src="pico.js"></script>
+```
+
+#### node.js ####
+```bash
+$ npm install node-pico
+```
 
 ### Change log ###
 

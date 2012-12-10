@@ -1,25 +1,22 @@
 /**
  * Demo for node.js (cross-platform)
- * 
- * dependencies
- * ============
- * - node-speaker
- *   Output raw PCM audio data to the speakers 
- *   https://github.com/TooTallNate/node-speaker
  *
- *   npm install speaker
- *
- * node v0.8.x compat
- * - readable-stream
- *   https://github.com/isaacs/readable-stream
- *
- *   npm install readable-stream
+ * npm install node-pico
  */
 
-var pico = require("../pico");
-require("../libs/PicoNodePlayer");
+var pico;
+
+try {
+    pico = require("node-pico");
+} catch (e) {
+    pico = require("../pico");
+    
+    require("../libs/PicoNodePlayer");
+    pico.bind(pico.NodePlayer);
+}
+
 require("../libs/PicoDelayNode");
 
 var demo = require("./demo");
 
-pico.bind(pico.NodePlayer).play(demo());
+pico.play(demo());
