@@ -6,7 +6,8 @@
         ImplClass = function(sys) {
             var context = new webkitAudioContext();
             var bufSrc, jsNode;
-            
+
+            this.maxSamplerate     = context.sampleRate;
             this.defaultSamplerate = context.sampleRate;
             this.env = "webkit";
             
@@ -72,8 +73,9 @@
                 var path = URL.createObjectURL(blob);
                 return new Worker(path);
             })();
-            
-            this.defaultSamplerate = 48000;
+
+            this.maxSamplerate     = 48000;
+            this.defaultSamplerate = 44100;
             this.env = "moz";
             
             this.play = function() {
@@ -104,7 +106,8 @@
         };
     } else {
         ImplClass = function(sys) {
-            this.defaultSamplerate = 48000;
+            this.maxSamplerate     = 48000;
+            this.defaultSamplerate =  8000;
             this.env = "nop";
             this.play  = function() {};
             this.pause = function() {};
@@ -121,7 +124,7 @@
     function SoundSystem(opts) {
         this.impl = null;
         this.isPlaying  = false;
-        this.samplerate = 48000;
+        this.samplerate = 44100;
         this.channels   = 2;
         this.cellsize   = 128;
         this.streammsec = 20;
@@ -136,9 +139,7 @@
             if (typeof player.play === "function" && typeof player.pause === "function") {
                 this.impl = player;
                 if (this.impl.defaultSamplerate) {
-                    if (this.samplerate > this.impl.defaultSamplerate) {
-                        this.samplerate = this.impl.defaultSamplerate;
-                    }
+                    this.samplerate = this.impl.defaultSamplerate;
                 }
             }
         }
@@ -148,8 +149,10 @@
     SoundSystem.prototype.setup = function(params) {
         if (typeof params === "object") {
             if (ACCEPT_SAMPLERATES.indexOf(params.samplerate) !== -1) {
-                if (params.samplerate <= this.impl.defaultSamplerate) {
+                if (params.samplerate <= this.impl.maxSamplerate) {
                     this.samplerate = params.samplerate;
+                } else {
+                    this.samplerate = this.impl.maxSamplerate;
                 }
             }
             if (ACCEPT_CELLSIZES.indexOf(params.cellsize) !== -1) {

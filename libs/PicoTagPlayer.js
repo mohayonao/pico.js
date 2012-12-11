@@ -7,6 +7,7 @@
         opts = opts || {};
         
         var bits = opts.bits === 1 ? 1 : 2;
+        this.maxSamplerate     = 48000;
         this.defaultSamplerate = 22050;
         this.env = "tag";
         

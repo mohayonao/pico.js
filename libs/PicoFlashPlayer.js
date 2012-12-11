@@ -13,7 +13,8 @@
             }
             initialize(opts || {});
         }
-        
+
+        this.maxSamplerate     = 44100;
         this.defaultSamplerate = 22050;
         this.env = "flash";
         

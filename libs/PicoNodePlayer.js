@@ -16,6 +16,7 @@ if (!Readable) Readable = require("readable-stream/readable");
 
 function PicoNodePlayer(sys) {
     
+    this.maxSamplerate     = 48000;
     this.defaultSamplerate = 44100;
     this.env = "node";
     this.node = null;
