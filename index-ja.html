@@ -2,7 +2,7 @@
 <html lang="ja">
   <head>
     <meta charset="utf-8">
-    <title>pico.js - リアルタイムに信号処理を行なうための簡易インターフェイス</title>
+    <title>pico.js - Write Once, Play Anywhere!</title>
     <link rel="stylesheet" href="misc/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="misc/prettify.css" type="text/css" />
     <link rel="shortcut icon" href="./favicon.ico">
@@ -35,7 +35,7 @@
       <div class="row">
         <div class="span6">
           <h3>これは何？</h3>
-          <p>JavaScriptでリアルタイム信号処理を行なうための簡易インターフェイスです.</p>
+          <p>JavaScriptでリアルタイム信号処理を行なうための簡易インターフェイスです.ブラウザとnode.jsで動作します.</p>
         </div>
         <div class="span6">
           <h3>使える環境</h3>
@@ -109,8 +109,10 @@ pico.play(noise);
               <p><code>pico.bind(pico.FlashPlayer,{src:"libs/PicoFlashPlayer.swf"})</code></p>
             </li>
             <li>
-              <h4>node.jsで再生</h4>
-              <p>詳しくは, リポジトリ内 <a href="https://github.com/mohayonao/pico.js/blob/master/demo/node-demo.js">demo/node-demo.js</a> を参照してください.</p>
+              <h4>node.js サポート</h4>
+              <p>npmでインストールできます.</p>
+              <p><code>$ npm install node-pico</code></p>
+              <p>リポジトリ内 <a href="https://github.com/mohayonao/pico.js/blob/master/demo/node-demo.js">demo/node-demo.js</a> を参照してください.</p>
             </li>
           </ol>
         </div>
@@ -208,8 +210,8 @@ window.f2 = function(t) {
 
 function oneliner() {
     var t = 0, dt = 8000 / pico.samplerate;
-    var delay = new pico.DelayNode({time:225, feedback:0.8});
-    
+    var dlyL = new pico.DelayNode({time:225, feedback:0.8});
+    var dlyR = new pico.DelayNode({time:225, feedback:0.8});
     return {
         process: function(L, R) {
             for (var i = 0; i < L.length; i++) {
@@ -217,7 +219,8 @@ function oneliner() {
                 R[i] = (window.f2(t|0) % 256) / 512;
                 t += dt;
             }
-            delay.process(L, R);
+            dlyL.process(L, true);
+            dlyR.process(R, true);
         }
     };
 }
@@ -341,8 +344,8 @@ pico.play(demo());
           
           function oneliner() {
               var t = 0, dt = 8000 / pico.samplerate;
-              var delay = new pico.DelayNode({time:225, feedback:0.8});
-              
+              var dlyL = new pico.DelayNode({time:225, feedback:0.8});
+              var dlyR = new pico.DelayNode({time:225, feedback:0.8});
               return {
                   process: function(L, R) {
                       for (var i = 0; i < L.length; i++) {
@@ -350,7 +353,8 @@ pico.play(demo());
                           R[i] = (window.f2(t|0) % 256) / 512;
                           t += dt;
                       }
-                      delay.process(L, R);
+                      dlyL.process(L, true);
+                      dlyR.process(R, true);
                   }
               };
           }

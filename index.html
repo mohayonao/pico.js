@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>pico.js - Simple interface for a real-time audio processing</title>
+    <title>pico.js - Write Once, Play Anywhere!</title>
     <link rel="stylesheet" href="misc/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="misc/prettify.css" type="text/css" />
     <link rel="shortcut icon" href="./favicon.ico">
@@ -35,7 +35,7 @@
       <div class="row">
         <div class="span6">
           <h3>What is?</h3>
-          <p>A JavaScript libray for real-time audio processing</p>
+          <p>Pico.js is a JavaScript library for real-time audio processing that runs a browser and node.js.</p>
         </div>
         <div class="span6">
           <h3>Support</h3>
@@ -110,7 +110,9 @@ pico.play(noise);
               <p><code>pico.bind(pico.FlashPlayer,{src:"libs/PicoFlashPlayer.swf"})</code></p>
             </li>
             <li>
-              <h4>for node.js on Mac</h4>
+              <h4>node.js support</h4>
+              <p>You can install with npm.</p>
+              <p><code>$ npm install node-pico</code></p>
               <p>See: repository <a href="https://github.com/mohayonao/pico.js/blob/master/demo/node-demo.js">demo/node-demo.js</a></p>
             </li>
           </ol>
@@ -209,8 +211,8 @@ window.f2 = function(t) {
 
 function oneliner() {
     var t = 0, dt = 8000 / pico.samplerate;
-    var delay = new pico.DelayNode({time:225, feedback:0.8});
-    
+    var dlyL = new pico.DelayNode({time:225, feedback:0.8});
+    var dlyR = new pico.DelayNode({time:225, feedback:0.8});
     return {
         process: function(L, R) {
             for (var i = 0; i < L.length; i++) {
@@ -218,7 +220,8 @@ function oneliner() {
                 R[i] = (window.f2(t|0) % 256) / 512;
                 t += dt;
             }
-            delay.process(L, R);
+            dlyL.process(L, true);
+            dlyR.process(R, true);
         }
     };
 }
@@ -283,7 +286,7 @@ pico.play(demo());
       </div>
       <footer>
         <hr/>
-        2012 <a href="http://twitter.com/mohayonao" target="twitter">@mohayonao</a> / pico.js - Simple interface for a real-time audio processing
+        2012 <a href="http://twitter.com/mohayonao" target="twitter">@mohayonao</a> / pico.js - "Write Once, Play Anywhere" JavaScript Library for real-time audio processing
       </footer>
     </div><!-- /container -->
     <script>
@@ -339,11 +342,11 @@ pico.play(demo());
           window.f2 = function(t) {
               return (t>>9)&((t<<5)|(Math.sin(t*1.4142)*3000))+(t>>3);
           };
-          
+
           function oneliner() {
               var t = 0, dt = 8000 / pico.samplerate;
-              var delay = new pico.DelayNode({time:225, feedback:0.8});
-              
+              var dlyL = new pico.DelayNode({time:225, feedback:0.8});
+              var dlyR = new pico.DelayNode({time:225, feedback:0.8});
               return {
                   process: function(L, R) {
                       for (var i = 0; i < L.length; i++) {
@@ -351,7 +354,8 @@ pico.play(demo());
                           R[i] = (window.f2(t|0) % 256) / 512;
                           t += dt;
                       }
-                      delay.process(L, R);
+                      dlyL.process(L, true);
+                      dlyR.process(R, true);
                   }
               };
           }
