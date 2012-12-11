@@ -12,7 +12,7 @@ Installation
 ------------
 
 #### browser ####
-````html
+```html
 <script src="pico.js"></script>
 ```
 
