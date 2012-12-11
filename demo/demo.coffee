@@ -117,7 +117,7 @@ class FMSynthLead extends ToneGenerator
         op[2].amp *= 0.9998
         @fb = fb
         @env.process cell
-        @delay.process cell
+        @delay.process cell, true
         cell
 
 class PwmGenerator extends ToneGenerator

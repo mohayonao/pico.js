@@ -182,7 +182,7 @@
       op[2].amp *= 0.9998;
       this.fb = fb;
       this.env.process(cell);
-      this.delay.process(cell);
+      this.delay.process(cell, true);
       return cell;
     };
 
