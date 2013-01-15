@@ -46,6 +46,11 @@ pico.play(sinetone(880));
 Change log
 ----------
 
+2013 01 15 - **0.0.5**
+
+* Fixed: stream size for WindowsXP/Linux (1024->8192)
+* Fixed: interval of processing for Firefox (using mozCurrentSampleOffset)
+
 2012 12 11 - **0.0.4**
 
 * Added fake Float32Array (for IE9)
