@@ -87,9 +87,20 @@
                 var audio = new Audio();
                 var onaudioprocess;
                 var interleaved = new Float32Array(sys.streamsize * sys.channels);
-                var interval = sys.streamsize / sys.samplerate * 1000;
-                
+                var interval = sys.streammsec;
+                var written  = 0;
+                var limit    = sys.streamsize << 4;
+                /*
+                if (navigator.userAgent.toLowerCase().indexOf("linux") !== -1) {
+                    interval = sys.streamsize / sys.samplerate * 1000;
+                    written  = -Infinity;
+                }
+                */
                 onaudioprocess = function() {
+                    var offset = audio.mozCurrentSampleOffset();
+                    if (written > offset + limit) {
+                        return;
+                    }
                     var inL = sys.strmL, inR = sys.strmR,
                         i = interleaved.length, j = inL.length;
                     sys.process();
