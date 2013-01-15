@@ -92,12 +92,12 @@
                 var interval = sys.streammsec;
                 var written  = 0;
                 var limit    = sys.streamsize << 4;
-                /*
+                
                 if (navigator.userAgent.toLowerCase().indexOf("linux") !== -1) {
                     interval = sys.streamsize / sys.samplerate * 1000;
                     written  = -Infinity;
                 }
-                */
+                
                 onaudioprocess = function() {
                     var offset = audio.mozCurrentSampleOffset();
                     if (written > offset + limit) {
@@ -110,7 +110,7 @@
                         interleaved[--i] = inR[j];
                         interleaved[--i] = inL[j];
                     }
-                    audio.mozWriteAudio(interleaved);
+                    written += audio.mozWriteAudio(interleaved);
                 };
                 
                 audio.mozSetup(sys.channels, sys.samplerate);
