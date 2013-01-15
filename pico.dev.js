@@ -12,8 +12,10 @@
             this.env = "webkit";
             
             var ua = navigator.userAgent;
-            if (ua.match(/linux/i) || ua.match(/win(dows)?\s*(nt5\.1|xp)/i)) {
+            if (ua.match(/linux/i)) {
                 sys.streammsec *= 8;
+            } else if (ua.match(/win(dows)?\s*(nt 5\.1|xp)/i)) {
+                sys.streammsec *= 4;
             }
             
             this.play = function() {
