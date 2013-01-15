@@ -11,6 +11,11 @@
             this.defaultSamplerate = context.sampleRate;
             this.env = "webkit";
             
+            var ua = navigator.userAgent;
+            if (ua.match(/linux/i) || ua.match(/win(dows)?\s*(nt5\.1|xp)/i)) {
+                sys.streammsec *= 8;
+            }
+            
             this.play = function() {
                 var onaudioprocess;
                 var jsn_streamsize = sys.getAdjustSamples(context.sampleRate);
