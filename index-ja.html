@@ -307,7 +307,7 @@ pico.play(demo());
     <script src="misc/jquery.min.js"></script>
     <script src="misc/prettify.js"></script>
     
-    <script src="pico.js"></script>
+    <script src="pico.dev.js"></script>
     <script src="libs/PicoFlashPlayer.js"></script>
     <script src="libs/PicoDelayNode.js"></script>
     <script src="demo/demo.js"></script>
@@ -359,7 +359,7 @@ pico.play(demo());
               };
           }
           
-          if (pico.env === "nop" || (pico.env === "webkit" && navigator.userAgent.indexOf("Linux") !== -1)) {
+          if (pico.env === "nop") {
               pico.bind(pico.FlashPlayer, {src:"libs/PicoFlashPlayer.swf"});
           }
           prettyPrint();
