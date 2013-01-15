@@ -46,7 +46,11 @@ pico.play(sinetone(880));
 Change log
 ----------
 
-2013 01 16 - **0.0.5**
+2013 01 15 - **0.0.7**
+
+* Bugfix
+
+2013 01 15 - **0.0.6**
 
 * Fixed: stream size for WindowsXP (8192->4096)
 
