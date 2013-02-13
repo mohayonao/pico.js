@@ -15,28 +15,32 @@
         }
 
         this.maxSamplerate     = 44100;
-        this.defaultSamplerate = 22050;
+        this.defaultSamplerate = 44100;
         this.env = "flash";
         
         this.play = function() {
             var onaudioprocess;
             var interleaved = new Array(sys.streamsize * sys.channels);
+            var streammsec  = sys.streammsec;
             var written = 0;
+            var writtenIncr = sys.streamsize / sys.samplerate * 1000;
+            var start = Date.now();
             
             onaudioprocess = function() {
-                var offset = swf.currentSampleOffset(),
-                    inL = sys.strmL, inR = sys.strmR,
-                    i = interleaved.length, j = inL.length;
-                
-                if (offset > 0 && written > offset + 16384) {
+                if (written > Date.now() - start) {
                     return;
                 }
+                var inL = sys.strmL;
+                var inR = sys.strmR;
+                var i = interleaved.length;
+                var j = inL.length;
                 sys.process();
                 while (j--) {
-                    interleaved[--i] = inR[j];
-                    interleaved[--i] = inL[j];
+                    interleaved[--i] = (inR[j] * 32768)|0;
+                    interleaved[--i] = (inL[j] * 32768)|0;
                 }
-                written += swf.writeAudio(interleaved);
+                swf.writeAudio(interleaved.join(" "));
+                written += writtenIncr;
             };
             
             swf.setup(sys.channels, sys.samplerate);
@@ -45,6 +49,7 @@
         
         this.pause = function() {
             if (timerId !== 0) {
+                swf.cancel();
                 clearInterval(timerId);
                 timerId = 0;
             }

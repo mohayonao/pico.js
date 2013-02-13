@@ -21,30 +21,42 @@
             this.play = function() {
                 var onaudioprocess;
                 var jsn_streamsize = sys.getAdjustSamples(context.sampleRate);
-                var sys_streamsize;
+                var sys_streamsize = sys.streamsize;
                 var x, dx;
                 
                 if (sys.samplerate === context.sampleRate) {
                     onaudioprocess = function(e) {
-                        var inL = sys.strmL, inR = sys.strmR,
-                            outL = e.outputBuffer.getChannelData(0),
-                            outR = e.outputBuffer.getChannelData(1),
-                            i = outL.length;
+                        var outs = e.outputBuffer;
                         sys.process();
-                        while (i--) {
-                            outL[i] = inL[i];
-                            outR[i] = inR[i];
+                        outs.getChannelData(0).set(sys.strmL);
+                        outs.getChannelData(1).set(sys.strmR);
+                    };
+                } else if (sys.samplerate * 2 === context.sampleRate) {
+                    onaudioprocess = function(e) {
+                        var inL = sys.strmL;
+                        var inR = sys.strmR;
+                        var outs = e.outputBuffer;
+                        var outL = outs.getChannelData(0);
+                        var outR = outs.getChannelData(1);
+                        var i, imax = outs.length;
+                        var j;
+                        
+                        sys.process();
+                        for (i = j = 0; i < imax; i += 2, ++j) {
+                            outL[i] = outL[i+1] = inL[j];
+                            outR[i] = outR[i+1] = inR[j];
                         }
                     };
                 } else {
-                    sys_streamsize = sys.streamsize;
                     x  = sys_streamsize;
                     dx = sys.samplerate / context.sampleRate;
                     onaudioprocess = function(e) {
-                        var inL = sys.strmL, inR = sys.strmR,
-                            outL = e.outputBuffer.getChannelData(0),
-                            outR = e.outputBuffer.getChannelData(1),
-                            i, imax = outL.length;
+                        var inL = sys.strmL;
+                        var inR = sys.strmR;
+                        var outs = e.outputBuffer;
+                        var outL = outs.getChannelData(0);
+                        var outR = outs.getChannelData(1);
+                        var i, imax = outs.length;
                         
                         for (i = 0; i < imax; ++i) {
                             if (x >= sys_streamsize) {
@@ -87,35 +99,32 @@
             
             this.play = function() {
                 var audio = new Audio();
-                var onaudioprocess;
                 var interleaved = new Float32Array(sys.streamsize * sys.channels);
-                var interval = sys.streammsec;
+                var streammsec  = sys.streammsec;
                 var written  = 0;
-                var limit    = sys.streamsize << 4;
+                var writtenIncr = sys.streamsize / sys.samplerate * 1000;
+                var start = Date.now();
                 
-                if (navigator.userAgent.toLowerCase().indexOf("linux") !== -1) {
-                    interval = sys.streamsize / sys.samplerate * 1000;
-                    written  = -Infinity;
-                }
-                
-                onaudioprocess = function() {
-                    var offset = audio.mozCurrentSampleOffset();
-                    if (written > offset + limit) {
+                var onaudioprocess = function() {
+                    if (written > Date.now() - start) {
                         return;
                     }
-                    var inL = sys.strmL, inR = sys.strmR,
-                        i = interleaved.length, j = inL.length;
+                    var inL = sys.strmL;
+                    var inR = sys.strmR;
+                    var i = interleaved.length;
+                    var j = inL.length;
                     sys.process();
                     while (j--) {
                         interleaved[--i] = inR[j];
                         interleaved[--i] = inL[j];
                     }
-                    written += audio.mozWriteAudio(interleaved);
+                    audio.mozWriteAudio(interleaved);
+                    written += writtenIncr;
                 };
                 
                 audio.mozSetup(sys.channels, sys.samplerate);
                 timer.onmessage = onaudioprocess;
-                timer.postMessage(interval);
+                timer.postMessage(streammsec);
             };
             
             this.pause = function() {
@@ -300,7 +309,35 @@
         module.exports = global.pico = exports;
     } else if (typeof window !== "undefined") {
         if (typeof window.Float32Array === "undefined") {
-            window.Float32Array = Array; // fake Float32Array (for IE9)
+            window.Float32Array = function(arg) {
+                var a;
+                if (Array.isArray(arg)) {
+                    a = arg.slice();
+                } else if (typeof arg === "number") {
+                    a = new Array(arg);
+                    for (var i = 0; i < arg; ++i) {
+                        a[i] = 0;
+                    }
+                } else {
+                    a = [];
+                }
+                a.set = function(array, offset) {
+                    if (typeof offset === "undefined") {
+                        offset = 0;
+                    }
+                    var i, imax = Math.min(this.length - offset, array.length);
+                    for (i = 0; i < imax; ++i) {
+                        this[offset + i] = array[i];
+                    }
+                };
+                a.subarray = function(begin, end) {
+                    if (typeof end === "undefined") {
+                        end = this.length;
+                    }
+                    return new this.__klass(this.slice(begin, end));
+                };
+                return a;
+            };
         }
         
         exports.noConflict = (function() {

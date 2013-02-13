@@ -46,6 +46,11 @@ pico.play(sinetone(880));
 Change log
 ----------
 
+2013 02 13 - **0.0.8**
+
+* Performance improvement
+* Fixed: a better? Float32Array (for IE9)
+
 2013 01 15 - **0.0.7**
 
 * Bugfix

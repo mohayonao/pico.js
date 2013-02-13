@@ -8,50 +8,54 @@ package {
     public class PicoFlashPlayer extends Sprite {
         private var _sound:Sound = null;
         private var _dx:Number = 1;
-        private var _written:int = 0;
         private var _interleaved:Array = [];
+        private var _cancel_flag:Boolean = false;
         
         function PicoFlashPlayer() {
             ExternalInterface.addCallback("setup", _setup);
-            ExternalInterface.addCallback("currentSampleOffset", _currentSampleOffset);
+            ExternalInterface.addCallback("cancel", _cancel);
             ExternalInterface.addCallback("writeAudio", _writeAudio);
         }
         
         private function _setup(channels:int, samplerate:int):void {
             _dx = samplerate / 44100;
+            for (var i:int = 0; i < 8192; ++i) {
+                _interleaved.push(0);
+                _interleaved.push(0);
+            }            
+        }
+
+        private function _cancel():void {
+            _cancel_flag = true;
         }
         
-        private function _currentSampleOffset():int {
-            return _written;
-        }
-        
-        private function _writeAudio(interleaved:Array):int {
+        private function _writeAudio(interleaved:String):void {
             if (!_sound) {
                 _sound = new Sound();
                 _sound.addEventListener(SampleDataEvent.SAMPLE_DATA, _streaming);
                 _sound.play();
             }
-            
-            var i:int, imax:int = interleaved.length, x:Number = 0, written:int = 0;
+            _cancel_flag = false;
+
+            var samples:Array = interleaved.split(" ");
+            var i:int, imax:int = samples.length, x:Number = 0;
+            var k:Number = 1/32768;
             
             for (i = 0; i < imax; i += 2) {
                 while (x < 1) {
-                    _interleaved.push(interleaved[i+0]);
-                    _interleaved.push(interleaved[i+1]);
+                    _interleaved.push(samples[i+0] * k);
+                    _interleaved.push(samples[i+1] * k);
                     x += _dx;
-                    written += 1;
                 }
                 x -= 1;
             }
-            
-            return written;
         }
         
         private function _streaming(e:SampleDataEvent):void {
             var i:int, buffer:ByteArray = e.data;
             
-            if (_interleaved.length < 8192) {
-                for (i = 0; i < 8192; ++i) {
+            if (_cancel_flag || _interleaved.length < 4096) {
+                for (i = 0; i < 4096; ++i) {
                     buffer.writeFloat(0);
                 }
                 return;
@@ -61,7 +65,6 @@ package {
             
             for (i = 0; i < imax; ++i) {
                 buffer.writeFloat(_interleaved[i]);
-                ++_written;
             }
             
             _interleaved = _interleaved.slice(imax, _interleaved.length);
