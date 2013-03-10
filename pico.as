@@ -5,13 +5,13 @@ package {
     import flash.utils.ByteArray;
     import flash.external.ExternalInterface;
 
-    public class PicoFlashPlayer extends Sprite {
+    public class pico extends Sprite {
         private var _sound:Sound = null;
         private var _dx:Number = 1;
         private var _interleaved:Array = [];
         private var _cancel_flag:Boolean = false;
         
-        function PicoFlashPlayer() {
+        function pico() {
             ExternalInterface.addCallback("setup", _setup);
             ExternalInterface.addCallback("cancel", _cancel);
             ExternalInterface.addCallback("writeAudio", _writeAudio);
