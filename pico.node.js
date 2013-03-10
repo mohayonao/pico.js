@@ -12,7 +12,7 @@ var Speaker = require("speaker");
 // readable-stream
 //   https://github.com/isaacs/readable-stream
 //   npm install readable-stream
-if (!Readable) Readable = require("readable-stream/readable");
+if (!Readable) { Readable = require("readable-stream/readable"); }
 
 function PicoNodePlayer(sys) {
 
