@@ -340,7 +340,7 @@
                     if (typeof end === "undefined") {
                         end = this.length;
                     }
-                    return new this.__klass(this.slice(begin, end));
+                    return this.slice(begin, end);
                 };
                 return a;
             };
