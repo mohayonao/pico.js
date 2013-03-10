@@ -14,11 +14,14 @@
           "url" : "https://raw.github.com/mohayonao/pico.js/master/LICENSE" }
     ],
     "dependencies": {
-        "speaker": ">=0.0.5",
-        "readable-stream": ">=0.0.4"
+        "speaker": "*",
+        "readable-stream": "*"
     },
     "devDependencies": {
-        "uglify-js": "*",
-        "jshint"   : "*"
+        "grunt": ">=0.4.0",
+        "grunt-contrib-uglify": "~0.1.1",
+        "grunt-contrib-jshint": "~0.2.0",
+        "grunt-contrib-clean": "~0.4.0",
+        "grunt-contrib-watch": "~0.2.0"
     }
 }
