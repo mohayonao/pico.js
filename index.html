@@ -103,11 +103,8 @@ pico.play(noise);
               <p>You can choose some one [8000, 11025, 12000, 16000, 22050, 24000, 32000, 44100, 48000]</p>
             </li>
             <li>
-              <h4>via Flash Player (Optional)</h4>
-              <p>Load a script</p>
-              <p><code>&lt;script src="libs/PicoFlashPlayer.js"&gt;&lt/script&gt;</code></p>
-              <p>and</p>
-              <p><code>pico.bind(pico.FlashPlayer,{src:"libs/PicoFlashPlayer.swf"})</code></p>
+              <h4>Flash fallback</h4>
+              <p>Put in the '<a href="pico.swf">pico.swf</a>' to in the same folder as 'pico.js'</p>
             </li>
             <li>
               <h4>node.js support</h4>
@@ -175,7 +172,7 @@ pico.play(sinetone(880));
             </li>
             <li>
               <h4><code>pico.env</code></h4>
-              <p>Return environment (webkit, moz, nop=no operation)</p>
+              <p>Return environment (webkit, moz, flash, nop=no operation)</p>
             </li>
             <li>
               <h4><code>pico.samplerate</code></h4>
@@ -235,8 +232,9 @@ pico.play(oneliner());
         <div class="span6">
           <h3>Source</h3>
           <ul>
-            <li><a href="./pico.js">pico.js</a> (minified)</li>
+            <li><a href="./pico.js">pico.js</a> (minified) / <a href="./pico.js.map">source maps</a></li>
             <li><a href="./pico.dev.js">pico.dev.js</a> (uncompressed)</li>
+            <li><a href="./pico.swf">pico.swf</a> (Flash fallback)</li>
             <li><a href="https://github.com/mohayonao/pico.js" target="github">Hosted on GitHub</a></li>
           </ul>
           
@@ -309,7 +307,6 @@ pico.play(demo());
     <script src="misc/prettify.js"></script>
     
     <script src="pico.dev.js"></script>
-    <script src="libs/PicoFlashPlayer.js"></script>
     <script src="libs/PicoDelayNode.js"></script>
     <script src="demo/demo.js"></script>
     
@@ -360,9 +357,6 @@ pico.play(demo());
               };
           }
           
-          if (pico.env === "nop") {
-              pico.bind(pico.FlashPlayer, {src:"libs/PicoFlashPlayer.swf"});
-          }
           prettyPrint();
 
           var gen = [ null,

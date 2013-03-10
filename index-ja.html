@@ -103,10 +103,8 @@ pico.play(noise);
               <p>サンプリングレートは 8000, 11025, 12000, 16000, 22050, 24000, 32000, 44100, 48000 のいずれかを指定してください</p>
             </li>
             <li>
-              <h4>追加クラスを使って Flash Player 経由で再生</h4>
-              <p><code>&lt;script src="libs/PicoFlashPlayer.js"&gt;&lt/script&gt;</code></p>
-              <p>追加のスクリプトを読み込んだ後, <code>bind()</code> で実装クラスを指定します.</p>
-              <p><code>pico.bind(pico.FlashPlayer,{src:"libs/PicoFlashPlayer.swf"})</code></p>
+              <h4>Flash fallback</h4>
+              <p>'<a href="pico.swf">pico.swf</a>' を 'pico.js' と同じフォルダに設置します.</p>
             </li>
             <li>
               <h4>node.js サポート</h4>
@@ -174,7 +172,7 @@ pico.play(sinetone(880));
             </li>
             <li>
               <h4><code>pico.env</code></h4>
-              <p>実行環境を返す (webkit, moz, nop=利用できない)</p>
+              <p>実行環境を返す (webkit, moz, flash, nop=利用できない)</p>
             </li>
             <li>
               <h4><code>pico.samplerate</code></h4>
@@ -234,8 +232,9 @@ pico.play(oneliner());
         <div class="span6">
           <h3>ソースコード</h3>
           <ul>
-            <li><a href="./pico.js">pico.js</a> (minified)</li>
+            <li><a href="./pico.js">pico.js</a> (minified) / <a href="./pico.js.map">source maps</a></li>
             <li><a href="./pico.dev.js">pico.dev.js</a> (uncompressed)</li>
+            <li><a href="./pico.swf">pico.swf</a> (Flash fallback)</li>
             <li><a href="https://github.com/mohayonao/pico.js" target="github">Hosted on GitHub</a></li>
           </ul>
           
@@ -308,7 +307,6 @@ pico.play(demo());
     <script src="misc/prettify.js"></script>
     
     <script src="pico.dev.js"></script>
-    <script src="libs/PicoFlashPlayer.js"></script>
     <script src="libs/PicoDelayNode.js"></script>
     <script src="demo/demo.js"></script>
     
@@ -358,10 +356,7 @@ pico.play(demo());
                   }
               };
           }
-          
-          if (pico.env === "nop") {
-              pico.bind(pico.FlashPlayer, {src:"libs/PicoFlashPlayer.swf"});
-          }
+
           prettyPrint();
 
           var gen = [ null,
