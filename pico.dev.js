@@ -157,7 +157,7 @@
                 var scripts = document.getElementsByTagName("script");
                 if (scripts && scripts.length) {
                     for (var m, i = 0, imax = scripts.length; i < imax; ++i) {
-                        if ((m = /^(.*\/)pico(.*)\.js$/i.exec(scripts[i].src))) {
+                        if ((m = /^(.*\/)pico(?:\.dev)?\.js$/i.exec(scripts[i].src))) {
                             return m[1] + "pico.swf";
                         }
                     }
