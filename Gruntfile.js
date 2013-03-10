@@ -9,7 +9,7 @@ module.exports = function(grunt) {
     
     grunt.initConfig({
         jshint: {
-            all: ["pico.dev.js"],
+            all: ["pico.*.js"],
             options: {
                 curly   : true,
                 eqeqeq  : true,
@@ -22,8 +22,7 @@ module.exports = function(grunt) {
                 trailing: true,
                 newcap  : false,
                 browser : true,
-                node    : true,
-                predef  : ["timbre"]
+                node    : true
             }
         },
         uglify: {
@@ -34,8 +33,8 @@ module.exports = function(grunt) {
         },
         watch: {
             src: {
-                files: ["pico.dev.js"],
-                tasks: ["jshint"]
+                files: ["pico.*.js"],
+                tasks: ["default"]
             }
         },
         clean: ["pico.js", "pico.js.map"]
