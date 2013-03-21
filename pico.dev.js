@@ -360,7 +360,7 @@
 
     // Flash fallback
     (function() {
-        if (typeof window === "undefined") {
+        if (typeof window === "undefined" || window.pico.env !== "nop") {
             return;
         }
         var nav = navigator;
