@@ -1,6 +1,6 @@
 {
     "name": "node-pico",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "description": "Pico.js is a JavaScript library for real-time audio processing that runs a browser and node.js.",
     "author": "nao yonamine <mohayonao@gmail.com>",
     "keywords": ["audio"],

@@ -45,6 +45,10 @@ pico.play(sinetone(880));
 
 Change log
 ----------
+2013 03 21 - **1.1.0**
+
+* fixed Flash fallback
+
 2013 03 10 - **1.0.0**
 
 * Flash fallback support: optional -> default
