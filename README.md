@@ -45,9 +45,13 @@ pico.play(sinetone(880));
 
 Change log
 ----------
+2013 03 21 - **1.1.1**
+
+* Fixed: nop samplerate (8000Hz -> 44100Hz)
+
 2013 03 21 - **1.1.0**
 
-* fixed Flash fallback
+* Fixed: Flash fallback
 
 2013 03 10 - **1.0.0**
 

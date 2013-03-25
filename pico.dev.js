@@ -141,7 +141,7 @@
     } else {
         ImplClass = function(sys) {
             this.maxSamplerate     = 48000;
-            this.defaultSamplerate =  8000;
+            this.defaultSamplerate = 44100;
             this.env = "nop";
             this.play  = function() {};
             this.pause = function() {};
