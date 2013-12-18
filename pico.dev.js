@@ -78,10 +78,16 @@
         }
 
         bufSrc = context.createBufferSource();
-        jsNode = context.createJavaScriptNode(jsn_streamsize, 2, sys.channels);
+        if (context.createScriptProcessor) {
+          jsNode = context.createScriptProcessor(jsn_streamsize, 2, sys.channels);
+        } else {
+          jsNode = context.createJavaScriptNode(jsn_streamsize, 2, sys.channels);
+        }
         jsNode.onaudioprocess = onaudioprocess;
-        bufSrc.noteOn(0);
-        bufSrc.connect(jsNode);
+        if (bufSrc.noteOn) {
+          bufSrc.noteOn(0);
+          bufSrc.connect(jsNode);
+        }
         jsNode.connect(context.destination);
       };
 
