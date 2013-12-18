@@ -1,4 +1,4 @@
-pico.js
+pico.js [![Dependency Status](https://david-dm.org/mohayonao/pico.js.png)](https://david-dm.org/mohayonao/pico.js)
 =======
 
 Pico.js is a JavaScript library for real-time audio processing that runs a browser and node.js.
@@ -45,6 +45,10 @@ pico.play(sinetone(880));
 
 Change log
 ----------
+2013 12 18 - **1.2.0**
+
+* Fixed issue [#5](https://github.com/mohayonao/pico.js/issues/5): supporting Web Audio API for Firefox
+
 2013 03 21 - **1.1.1**
 
 * Fixed: nop samplerate (8000Hz -> 44100Hz)
