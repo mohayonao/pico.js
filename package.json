@@ -18,8 +18,8 @@
     }
   ],
   "dependencies": {
-    "speaker": "*",
-    "readable-stream": "*"
+    "readable-stream": "^1.0.33",
+    "speaker": "^0.2.2"
   },
   "devDependencies": {
     "jshint": "^2.6.0",

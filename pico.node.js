@@ -3,7 +3,7 @@
 var Readable = require("stream").Readable;
 
 // node-speaker
-//   Output raw PCM audio data to the speakers 
+//   Output raw PCM audio data to the speakers
 //   https://github.com/TooTallNate/node-speaker
 //   npm install speaker
 var Speaker = require("speaker");
@@ -23,7 +23,7 @@ function PicoNodePlayer(sys) {
 
     this.play = function() {
         this.node = new Readable();
-        this.node._read = function(n, fn) {
+        this.node._read = function(n) {
             var inL = sys.strmL, inR = sys.strmR;
             var buf = new Buffer(n);
 
@@ -41,7 +41,7 @@ function PicoNodePlayer(sys) {
                 }
             }
 
-            fn(null, buf);
+            this.push(buf);
         };
         this.node.pipe(new Speaker({sampleRate:sys.samplerate}));
     };
