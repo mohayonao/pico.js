@@ -45,6 +45,11 @@ pico.play(sinetone(880));
 
 Change log
 ----------
+2015 01 24 - **1.3.0**
+
+* Remove Float32Array shim
+* Remove Audio Data API support
+
 2013 12 18 - **1.2.0**
 
 * Fixed issue [#5](https://github.com/mohayonao/pico.js/issues/5): supporting Web Audio API for Firefox
