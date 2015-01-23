@@ -96,54 +96,6 @@
         jsNode.disconnect();
       };
     };
-  } else if (typeof Audio === "function" &&
-             typeof (new Audio()).mozSetup === "function") {
-    ImplClass = function(sys) {
-      var timer = (function() {
-        var source = "var t=0;onmessage=function(e){if(t)t=clearInterval(t),0;if(typeof e.data=='number'&&e.data>0)t=setInterval(function(){postMessage(0);},e.data);};";
-        var blob = new Blob([source], {type:"text/javascript"});
-        var path = window.URL.createObjectURL(blob);
-        return new Worker(path);
-      })();
-
-      this.maxSamplerate     = 48000;
-      this.defaultSamplerate = 44100;
-      this.env = "moz";
-
-      this.play = function() {
-        var audio = new Audio();
-        var interleaved = new Float32Array(sys.streamsize * sys.channels);
-        var streammsec  = sys.streammsec;
-        var written  = 0;
-        var writtenIncr = sys.streamsize / sys.samplerate * 1000;
-        var start = Date.now();
-
-        var onaudioprocess = function() {
-          if (written > Date.now() - start) {
-            return;
-          }
-          var inL = sys.strmL;
-          var inR = sys.strmR;
-          var i = interleaved.length;
-          var j = inL.length;
-          sys.process();
-          while (j--) {
-            interleaved[--i] = inR[j];
-            interleaved[--i] = inL[j];
-          }
-          audio.mozWriteAudio(interleaved);
-          written += writtenIncr;
-        };
-
-        audio.mozSetup(sys.channels, sys.samplerate);
-        timer.onmessage = onaudioprocess;
-        timer.postMessage(streammsec);
-      };
-
-      this.pause = function() {
-        timer.postMessage(0);
-      };
-    };
   } else {
     ImplClass = function(sys) {
       this.maxSamplerate     = 48000;
