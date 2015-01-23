@@ -14,80 +14,22 @@
       var context = new AudioContext();
       var bufSrc, jsNode;
 
-      this.maxSamplerate     = context.sampleRate;
-      this.defaultSamplerate = context.sampleRate;
+      this.sampleRate = context.sampleRate;
       this.env = "webkit";
 
-      var ua = navigator.userAgent;
-      if (ua.match(/linux/i)) {
-        sys.streammsec *= 8;
-      } else if (ua.match(/win(dows)?\s*(nt 5\.1|xp)/i)) {
-        sys.streammsec *= 4;
-      }
-
       this.play = function() {
-        var onaudioprocess;
-        var jsn_streamsize = sys.getAdjustSamples(context.sampleRate);
-        var sys_streamsize = sys.streamsize;
-        var x, dx;
-
-        if (sys.samplerate === context.sampleRate) {
-          onaudioprocess = function(e) {
-            var outs = e.outputBuffer;
-            sys.process();
-            outs.getChannelData(0).set(sys.strmL);
-            outs.getChannelData(1).set(sys.strmR);
-          };
-        } else if (sys.samplerate * 2 === context.sampleRate) {
-          onaudioprocess = function(e) {
-            var inL = sys.strmL;
-            var inR = sys.strmR;
-            var outs = e.outputBuffer;
-            var outL = outs.getChannelData(0);
-            var outR = outs.getChannelData(1);
-            var i, imax = outs.length;
-            var j;
-
-            sys.process();
-            for (i = j = 0; i < imax; i += 2, ++j) {
-              outL[i] = outL[i+1] = inL[j];
-              outR[i] = outR[i+1] = inR[j];
-            }
-          };
-        } else {
-          x  = sys_streamsize;
-          dx = sys.samplerate / context.sampleRate;
-          onaudioprocess = function(e) {
-            var inL = sys.strmL;
-            var inR = sys.strmR;
-            var outs = e.outputBuffer;
-            var outL = outs.getChannelData(0);
-            var outR = outs.getChannelData(1);
-            var i, imax = outs.length;
-
-            for (i = 0; i < imax; ++i) {
-              if (x >= sys_streamsize) {
-                sys.process();
-                x -= sys_streamsize;
-              }
-              outL[i] = inL[x|0];
-              outR[i] = inR[x|0];
-              x += dx;
-            }
-          };
-        }
-
         bufSrc = context.createBufferSource();
-        if (context.createScriptProcessor) {
-          jsNode = context.createScriptProcessor(jsn_streamsize, 2, sys.channels);
-        } else {
-          jsNode = context.createJavaScriptNode(jsn_streamsize, 2, sys.channels);
-        }
-        jsNode.onaudioprocess = onaudioprocess;
-        if (bufSrc.noteOn) {
-          bufSrc.noteOn(0);
-          bufSrc.connect(jsNode);
-        }
+        jsNode = context.createScriptProcessor(sys.streamsize, 2, sys.channels);
+        jsNode.onaudioprocess = function(e) {
+          var outs = e.outputBuffer;
+          sys.process();
+          outs.getChannelData(0).set(sys.strmL);
+          outs.getChannelData(1).set(sys.strmR);
+        };
+
+        bufSrc.start(0);
+        bufSrc.connect(jsNode);
+
         jsNode.connect(context.destination);
       };
 
@@ -98,25 +40,17 @@
     };
   } else {
     ImplClass = function(sys) {
-      this.maxSamplerate     = 48000;
-      this.defaultSamplerate = 44100;
+      this.sampleRate = 44100;
       this.env = "nop";
       this.play  = function() {};
       this.pause = function() {};
     };
   }
 
-  var ACCEPT_SAMPLERATES = [
-    8000, 11025, 12000, 16000, 22050, 24000, 32000, 44100, 48000
-  ];
-  var ACCEPT_CELLSIZES = [
-    32,64,128,256
-  ];
-
   function SoundSystem(opts) {
     this.impl = null;
     this.isPlaying  = false;
-    this.samplerate = 44100;
+    this.sampleRate = 44100;
     this.channels   = 2;
     this.cellsize   = 128;
     this.streammsec = 20;
@@ -130,8 +64,8 @@
       var player = new klass(this, opts);
       if (typeof player.play === "function" && typeof player.pause === "function") {
         this.impl = player;
-        if (this.impl.defaultSamplerate) {
-          this.samplerate = this.impl.defaultSamplerate;
+        if (this.impl.sampleRate) {
+          this.sampleRate = this.impl.sampleRate;
         }
       }
     }
@@ -139,42 +73,7 @@
   };
 
   SoundSystem.prototype.setup = function(params) {
-    if (typeof params === "object") {
-      if (ACCEPT_SAMPLERATES.indexOf(params.samplerate) !== -1) {
-        if (params.samplerate <= this.impl.maxSamplerate) {
-          this.samplerate = params.samplerate;
-        } else {
-          this.samplerate = this.impl.maxSamplerate;
-        }
-      }
-      if (ACCEPT_CELLSIZES.indexOf(params.cellsize) !== -1) {
-        this.cellsize = params.cellsize;
-      }
-    } else if (typeof params === "string") {
-      switch (params) {
-      case "mobile":
-        this.samplerate = 22050;
-        this.cellsize   = 128;
-        break;
-      case "high-res":
-        this.cellsize = 32;
-        break;
-      case "low-res":
-        this.cellsize = 256;
-        break;
-      }
-
-    }
     return this;
-  };
-
-  SoundSystem.prototype.getAdjustSamples = function(samplerate) {
-    var samples, bits;
-    samplerate = samplerate || this.samplerate;
-    samples = this.streammsec / 1000 * samplerate;
-    bits = Math.ceil(Math.log(samples) * Math.LOG2E);
-    bits = (bits < 8) ? 8 : (bits > 14) ? 14 : bits;
-    return 1 << bits;
   };
 
   SoundSystem.prototype.play = function(generator) {
@@ -247,9 +146,9 @@
         return instance.impl.env;
       }
     },
-    samplerate: {
+    sampleRate: {
       get: function() {
-        return instance.samplerate;
+        return instance.sampleRate;
       }
     },
     channels: {
@@ -313,8 +212,7 @@
       function PicoFlashPlayer(sys) {
         var timerId = 0;
 
-        this.maxSamplerate     = 44100;
-        this.defaultSamplerate = 44100;
+        this.sampleRate = 44100;
         this.env = "flash";
 
         this.play = function() {
@@ -322,7 +220,7 @@
           var interleaved = new Array(sys.streamsize * sys.channels);
           var streammsec  = sys.streammsec;
           var written = 0;
-          var writtenIncr = sys.streamsize / sys.samplerate * 1000;
+          var writtenIncr = sys.streamsize / sys.sampleRate * 1000;
           var start = Date.now();
 
           onaudioprocess = function() {
@@ -343,7 +241,7 @@
           };
 
           if (swf.setup) {
-            swf.setup(sys.channels, sys.samplerate);
+            swf.setup(sys.channels, sys.sampleRate);
             timerId = setInterval(onaudioprocess, streammsec);
           } else {
             console.warn("Cannot find " + src);
