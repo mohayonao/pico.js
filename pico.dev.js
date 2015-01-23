@@ -320,38 +320,6 @@
   if (typeof module !== "undefined" && module.exports) {
     module.exports = global.pico = exports;
   } else if (typeof window !== "undefined") {
-    if (typeof window.Float32Array === "undefined") {
-      window.Float32Array = function(arg) {
-        var a;
-        if (Array.isArray(arg)) {
-          a = arg.slice();
-        } else if (typeof arg === "number") {
-          a = new Array(arg);
-          for (var i = 0; i < arg; ++i) {
-            a[i] = 0;
-          }
-        } else {
-          a = [];
-        }
-        a.set = function(array, offset) {
-          if (typeof offset === "undefined") {
-            offset = 0;
-          }
-          var i, imax = Math.min(this.length - offset, array.length);
-          for (i = 0; i < imax; ++i) {
-            this[offset + i] = array[i];
-          }
-        };
-        a.subarray = function(begin, end) {
-          if (typeof end === "undefined") {
-            end = this.length;
-          }
-          return this.slice(begin, end);
-        };
-        return a;
-      };
-    }
-
     exports.noConflict = (function() {
       var _ = window.pico;
       return function() {
