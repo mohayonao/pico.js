@@ -1,6 +1,19 @@
 {
-    "newcap" : false,
-    "browser": true,
-    "node"   : true,
-    "predef" : ["pico","URL","webkitAudioContext","ActiveXObject"]
+  "curly"    : true,
+  "eqeqeq"   : true,
+  "forin"    : true,
+  "immed"    : true,
+  "newcap"   : false,
+  "noarg"    : true,
+  "noempty"  : true,
+  "nonew"    : true,
+  "undef"    : true,
+  "unused"   : true,
+  "strict"   : true,
+  "quotmark" : "double",
+  "trailing" : true,
+  "validthis": true,
+  "eqnull"   : true,
+  "browser"  : true,
+  "node"     : true
 }
