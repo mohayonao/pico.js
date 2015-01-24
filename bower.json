@@ -1,0 +1,24 @@
+{
+  "name": "pico.js",
+  "description": "Audio processor for the cross-platform",
+  "version": "2.0.0",
+  "authors": [
+    "mohayonao <mohayonao@gmail.com>"
+  ],
+  "homepage": "https://github.com/mohayonao/pico.js",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "src",
+    "examples",
+    "favicon.ico",
+    "index.html"
+  ],
+  "keywords": [
+    "audio",
+    "webaudioapi"
+  ],
+  "license": "MIT",
+  "main": "build/pico.js"
+}
