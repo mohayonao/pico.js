@@ -1,0 +1,2 @@
+--reporter spec
+--compilers js:espower-6to5/guess

@@ -1,102 +1,115 @@
-pico.js [![Dependency Status](https://david-dm.org/mohayonao/pico.js.png)](https://david-dm.org/mohayonao/pico.js)
-=======
+# pico.js
+[![Build Status](http://img.shields.io/travis/mohayonao/pico.js.svg?style=flat-square)](https://travis-ci.org/mohayonao/pico.js)
+[![NPM Version](http://img.shields.io/npm/v/node-pico.svg?style=flat-square)](https://www.npmjs.org/package/node-pico)
+[![Bower](https://img.shields.io/bower/v/pico.js.svg?style=flat-square)](https://github.com/mohayonao/pico.js)
+[![6to5](http://img.shields.io/badge/module-6to5-brightgreen.svg?style=flat-square)](https://6to5.org/)
+[![License](http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](http://mohayonao.mit-license.org/)
 
-Pico.js is a JavaScript library for real-time audio processing that runs a browser and node.js.
+> Audio processor for the cross-platform
 
-Reference and Demo
-------------------
+- [online demo](http://mohayonao.github.io/pico.js/)
 
-[English](http://mohayonao.github.com/pico.js/) | [日本語](http://mohayonao.github.com/pico.js/index-ja.html)
+## Support
 
-Installation
-------------
+|                      | Support | API            |
+| -------------------- |:-------:| -------------- |
+| Google Chrome 10+    | :o:     | Web Audio API  |
+| Firefox 25+          | :o:     | Web Audio API  |
+| Safari 6+            | :o:     | Web Audio API  |
+| Opera 15+            | :o:     | Web Audio API  |
+| Internet Explorer 10 | :o:     | Flash fallback |
+| Node.js 0.10         | :o:     | node-speaker   |
 
-#### browser ####
-```html
-<script src="pico.js"></script>
+## Installation
+
+npm:
+
+```
+npm install node-pico
 ```
 
-#### node.js ####
-```bash
-$ npm install node-pico
+bower:
+
+```
+bower install pico.js
 ```
 
-Example
--------
+downloads:
+
+- [pico.js](https://raw.githubusercontent.com/mohayonao/pico.js/master/build/pico.js)
+- [pico.min.js](https://raw.githubusercontent.com/mohayonao/pico.js/master/build/pico.min.js)
+- [pico.swf](http://mohayonao.github.io/pico.js/build/pico.swf) - must be put in the same directory with the pico.js.
+
+## API
+
+- `Pico.play(audioprocess: function): void`
+- `Pico.pause(): void`
+- `Pico.sampleRate: number`
+- `Pico.bufferSize: number`
+- `Pico.isPlaying: boolean`
+
+## Example
 
 ```javascript
-var pico = require("node-pico");
+var Pico = require("node-pico");
 
-function sinetone(freq) {
-    var phase = 0,
-        phaseStep = freq / pico.samplerate;
-    return {
-        process: function(L, R) {
-            for (var i = 0; i < L.length; i++) {
-                L[i] = R[i] = Math.sin(6.28318 * phase) * 0.25;
-                phase += phaseStep;
-            }
-        }
-    };
+function sinetone() {
+  var x1 = 0, y1 = 440 / Pico.sampleRate;
+  var x2 = 0, y2 = 442 / Pico.sampleRate;
+
+  return function(e) {
+    var out = e.buffers;
+
+    for (var i = 0; i < e.bufferSize; i++) {
+      out[0][i] = Math.sin(2 * Math.PI * x1) * 0.25;
+      out[1][i] = Math.sin(2 * Math.PI * x2) * 0.25;
+      x1 += y1;
+      x2 += y2;
+    }
+  };
 }
 
-pico.play(sinetone(880));
+Pico.play(sinetone());
+
+setTimeout(function() {
+  Pico.pause();
+}, 5000);
 ```
 
-Change log
-----------
-2015 01 24 - **1.3.0**
+How to play other examples on node.js
 
-* Remove Float32Array shim
-* Remove Audio Data API support
+```
+$ npm install .
+$ npm run build
+$ node examples
+```
 
-2013 12 18 - **1.2.0**
+## Development
 
-* Fixed issue [#5](https://github.com/mohayonao/pico.js/issues/5): supporting Web Audio API for Firefox
+build: `6to5 -> browserify -> uglify`
 
-2013 03 21 - **1.1.1**
+```
+npm run build
+```
 
-* Fixed: nop samplerate (8000Hz -> 44100Hz)
+test: `mocha`
 
-2013 03 21 - **1.1.0**
+```
+npm run test
+```
 
-* Fixed: Flash fallback
+coverage: `istanbul`
 
-2013 03 10 - **1.0.0**
+```
+npm run cover
+```
 
-* Flash fallback support: optional -> default
+lint: `jshint`
 
-2013 02 13 - **0.0.8**
+```
+npm run lint
+```
 
-* Performance improvement
-* Fixed: a better? Float32Array (for IE9)
+## License
 
-2013 01 15 - **0.0.7**
-
-* Bugfix
-
-2013 01 15 - **0.0.6**
-
-* Fixed: stream size for WindowsXP (8192->4096)
-
-2013 01 15 - **0.0.5**
-
-* Fixed: stream size for WindowsXP/Linux (1024->8192)
-* Fixed: interval of processing for Firefox (using mozCurrentSampleOffset)
-
-2012 12 11 - **0.0.4**
-
-* Added fake Float32Array (for IE9)
-* Fixed: default samplerate (webkit=auto, moz,node.js=44.1KHz, flash=22.05KHz)
-
-2012 12 08 - **0.0.3**
-
-* Fixed issue [#2](https://github.com/mohayonao/pico.js/issues/2), added support cross-platform node.js
-
-2012 12 07 - **0.0.2**
-
-* Fixed issue [#1](https://github.com/mohayonao/pico.js/issues/1), the sound does not stop when switching browser tabs (Firefox)
-
-2012 12 05 - **0.0.1**
-
-* First release
+[MIT](http://mohayonao.mit-license.org/)
