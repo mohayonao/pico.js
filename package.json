@@ -13,8 +13,13 @@
   "devDependencies": {
     "6to5": "^2.13.6",
     "browserify": "^8.1.1",
+    "espower-6to5": "^1.1.0",
+    "istanbul": "^0.3.5",
     "jshint": "^2.6.0",
     "jshint-stylish": "^1.0.0",
+    "mocha": "^2.1.0",
+    "power-assert": "^0.10.1",
+    "sinon": "^1.12.2",
     "uglify-js": "^2.4.16"
   },
   "files": [
@@ -36,6 +41,9 @@
     "build-6to5": "6to5 src --out-dir lib --remove-comments",
     "build-browser": "browserify lib/browser.js --standalone Pico -o build/pico.js",
     "build-minify": "uglifyjs build/pico.js -o build/pico.min.js",
-    "lint": "jshint --reporter node_modules/jshint-stylish/stylish.js src"
+    "cover": "npm run build-6to5 && istanbul cover node_modules/mocha/bin/_mocha",
+    "lint": "jshint --reporter node_modules/jshint-stylish/stylish.js src test",
+    "test": "npm run build-6to5 && mocha test",
+    "travis": "npm run lint && npm run test"
   }
 }
