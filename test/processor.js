@@ -1,7 +1,7 @@
 import assert from "power-assert";
 import sinon from "sinon";
-import Player from "../lib/player/player";
-import Processor from "../lib/processor";
+import Player from "../src/player/player";
+import Processor from "../src/processor";
 
 describe("Processor", () => {
   describe("constructor", () => {

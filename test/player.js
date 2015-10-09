@@ -1,5 +1,5 @@
 import assert from "power-assert";
-import Player from "../lib/player/player";
+import Player from "../src/player/player";
 
 describe("Player", () => {
   describe("constructor", () => {
