@@ -1,10 +1,8 @@
-"use strict";
-
 import Player from "./player";
 
-var AudioContext = global.AudioContext || global.webkitAudioContext;
+let AudioContext = global.AudioContext || global.webkitAudioContext;
 
-class WebAudioPlayer extends Player {
+export default class WebAudioPlayer extends Player {
   constructor(processor) {
     super(processor, 44100, 2048, "webaudio");
 
@@ -37,5 +35,3 @@ class WebAudioPlayer extends Player {
 }
 
 WebAudioPlayer.isEnabled = !!AudioContext;
-
-export default WebAudioPlayer;

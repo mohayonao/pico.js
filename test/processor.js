@@ -1,42 +1,40 @@
-"use strict";
-
 import assert from "power-assert";
 import sinon from "sinon";
-import Player from "../lib/player/player";
-import Processor from "../lib/processor";
+import Player from "../src/player/player";
+import Processor from "../src/processor";
 
 describe("Processor", () => {
   describe("constructor", () => {
     it("()", () => {
-      var processor = new Processor();
+      let processor = new Processor();
 
       assert(processor instanceof Processor);
     });
   });
   describe("env", () => {
     it("getter: string", () => {
-      var processor = new Processor();
+      let processor = new Processor();
 
       assert(typeof processor.env === "string");
     });
   });
   describe("sampleRate", () => {
     it("getter: number", () => {
-      var processor = new Processor();
+      let processor = new Processor();
 
       assert(typeof processor.sampleRate === "number");
     });
   });
   describe("bufferSize", () => {
     it("getter: number", () => {
-      var processor = new Processor();
+      let processor = new Processor();
 
       assert(typeof processor.bufferSize === "number");
     });
   });
   describe("bind", () => {
     it("(klass: function): void", () => {
-      var processor = new Processor();
+      let processor = new Processor();
 
       assert(typeof processor.bind === "function");
       assert(processor.bind(Player) === void 0);
@@ -44,7 +42,7 @@ describe("Processor", () => {
   });
   describe("play", () => {
     it("(audioprocess: function): void", () => {
-      var processor = new Processor();
+      let processor = new Processor();
 
       assert(typeof processor.play === "function");
       assert(processor.play() === void 0);
@@ -52,14 +50,14 @@ describe("Processor", () => {
   });
   describe("pause", () => {
     it("(): void", () => {
-      var processor = new Processor();
+      let processor = new Processor();
 
       assert(typeof processor.pause === "function");
       assert(processor.pause() === void 0);
     });
   });
   describe("works", () => {
-    var testPlayer;
+    let testPlayer;
 
     class TestPlayer extends Player {
       constructor(processor) {
@@ -73,8 +71,8 @@ describe("Processor", () => {
     });
 
     it("audioprocess", () => {
-      var processor = new Processor();
-      var audioprocess = sinon.spy();
+      let processor = new Processor();
+      let audioprocess = sinon.spy();
 
       assert(testPlayer === null);
 
@@ -101,7 +99,7 @@ describe("Processor", () => {
       processor.process(2048);
       assert(audioprocess.callCount === 2048 / processor.bufferSize);
 
-      var e = audioprocess.args[0][0];
+      let e = audioprocess.args[0][0];
       assert(e.bufferSize === processor.bufferSize);
       assert(Array.isArray(e.buffers));
       assert(e.buffers.length === 2);

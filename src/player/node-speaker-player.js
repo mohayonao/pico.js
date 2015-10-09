@@ -1,10 +1,8 @@
-"use strict";
-
 import stream from "stream";
 import Speaker from "speaker";
 import Player from "./player";
 
-class NodeSpeakerPlayer extends Player {
+export default class NodeSpeakerPlayer extends Player {
   constructor(processor) {
     super(processor, 44100, 2048, "node");
 
@@ -14,13 +12,13 @@ class NodeSpeakerPlayer extends Player {
   play() {
     this._node = new stream.Readable();
     this._node._read = (n) => {
-      var streamL = this.processor.streams[0];
-      var streamR = this.processor.streams[1];
-      var buf = new Buffer(n);
+      let streamL = this.processor.streams[0];
+      let streamR = this.processor.streams[1];
+      let buf = new Buffer(n);
 
       this.processor.process(this.streamSize);
 
-      for (var i = 0, imax = this.streamSize; i < imax; i++) {
+      for (let i = 0, imax = this.streamSize; i < imax; i++) {
         buf.writeFloatLE(streamL[i], i * 8 + 0);
         buf.writeFloatLE(streamR[i], i * 8 + 4);
       }
@@ -42,5 +40,3 @@ class NodeSpeakerPlayer extends Player {
     });
   }
 }
-
-export default NodeSpeakerPlayer;

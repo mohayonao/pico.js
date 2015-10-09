@@ -1,8 +1,6 @@
-"use strict";
-
 import Player from "./player";
 
-class FlashFallbackPlayer extends Player {
+export default class FlashFallbackPlayer extends Player {
   constructor(processor) {
     super(processor, 44100, 2048, "flashfallback");
 
@@ -34,14 +32,14 @@ class FlashFallbackPlayer extends Player {
 
   onaudioprocess(streamSize) {
     if (this._written < Date.now() - this._start) {
-      var x;
-      var streamL = this.processor.streams[0];
-      var streamR = this.processor.streams[1];
-      var out = this._out;
+      let x;
+      let streamL = this.processor.streams[0];
+      let streamR = this.processor.streams[1];
+      let out = this._out;
 
       this.processor.process(streamSize);
 
-      for (var i = 0, j = 0; i < streamSize; i++) {
+      for (let i = 0, j = 0; i < streamSize; i++) {
         x = (streamL[i] * 16384 + 32768)|0;
         x = Math.max(16384, Math.min(x, 49152));
         out[j++] = String.fromCharCode(x);
@@ -58,12 +56,12 @@ class FlashFallbackPlayer extends Player {
   }
 }
 
-var swfId = `PicoFlashFallbackPlayer${Date.now()}`;
+let swfId = `PicoFlashFallbackPlayer${Date.now()}`;
 
-var getPicoSwfUrl = () => {
-  var scripts = global.document.getElementsByTagName("script");
-  for (var i = 0; i < scripts.length; i++) {
-    var matched = scripts[i].src.match(/^(.*\/)pico(?:\.min)?\.js$/);
+let getPicoSwfUrl = () => {
+  let scripts = global.document.getElementsByTagName("script");
+  for (let i = 0; i < scripts.length; i++) {
+    let matched = scripts[i].src.match(/^(.*\/)pico(?:\.min)?\.js$/);
     if (matched) {
       return matched[1] + "pico.swf";
     }
@@ -71,10 +69,10 @@ var getPicoSwfUrl = () => {
   return "pico.swf";
 };
 
-var createFlashContainer = () => {
-  var container = global.document.createElement("div");
-  var object = global.document.createElement("object");
-  var param = global.document.createElement("param");
+let createFlashContainer = () => {
+  let container = global.document.createElement("div");
+  let object = global.document.createElement("object");
+  let param = global.document.createElement("param");
 
   param.setAttribute("name", "allowScriptAccess");
   param.setAttribute("value", "always");
@@ -109,5 +107,3 @@ FlashFallbackPlayer.fallback = (Pico) => {
     FlashFallbackPlayer.swf = global.document.getElementById(swfId);
   });
 };
-
-export default FlashFallbackPlayer;

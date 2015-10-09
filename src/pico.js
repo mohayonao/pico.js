@@ -1,8 +1,6 @@
-"use strict";
-
 import Processor from "./processor";
 
-var processor = new Processor();
+let processor = new Processor();
 
 export default new class Pico {
   bind(klass) {

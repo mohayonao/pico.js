@@ -1,10 +1,8 @@
-"use strict";
-
 import Player from "./player/player";
 
 const BUFFER_SIZE = 64;
 
-class Processor {
+export default class Processor {
   constructor() {
     this.player = new Player(this);
     this.audioprocess = null;
@@ -34,11 +32,11 @@ class Processor {
       this.isPlaying = true;
       this.streams = [
         new Float32Array(this.player.streamSize),
-        new Float32Array(this.player.streamSize),
+        new Float32Array(this.player.streamSize)
       ];
       this.buffers = [
         new Float32Array(BUFFER_SIZE),
-        new Float32Array(BUFFER_SIZE),
+        new Float32Array(BUFFER_SIZE)
       ];
       this.audioprocess = audioprocess;
       this.player.play();
@@ -56,23 +54,21 @@ class Processor {
   }
 
   process(streamSize) {
-    var audioprocess = this.audioprocess;
-    var streamL = this.streams[0];
-    var streamR = this.streams[1];
-    var buffers = this.buffers;
-    var bufferL = buffers[0];
-    var bufferR = buffers[1];
-    var n = streamSize / BUFFER_SIZE;
+    let audioprocess = this.audioprocess;
+    let streamL = this.streams[0];
+    let streamR = this.streams[1];
+    let buffers = this.buffers;
+    let bufferL = buffers[0];
+    let bufferR = buffers[1];
+    let n = streamSize / BUFFER_SIZE;
 
-    for (var i = 0; i < n; i++) {
+    for (let i = 0; i < n; i++) {
       audioprocess({
         bufferSize: BUFFER_SIZE,
-        buffers: buffers,
+        buffers: buffers
       });
       streamL.set(bufferL, i * BUFFER_SIZE);
       streamR.set(bufferR, i * BUFFER_SIZE);
     }
   }
 }
-
-export default Processor;

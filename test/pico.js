@@ -1,8 +1,6 @@
-"use strict";
-
 import assert from "power-assert";
-import Player from "../lib/player/player";
-import Pico from "../lib/pico";
+import Player from "../src/player/player";
+import Pico from "../src/pico";
 
 describe("Pico", () => {
   describe("bind", () => {

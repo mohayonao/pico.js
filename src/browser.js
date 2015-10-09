@@ -1,5 +1,3 @@
-"use strict";
-
 import Pico from "./pico";
 import WebAudioPlayer from "./player/web-audio-player";
 import FlashFallbackPlayer from "./player/flash-fallback-player";

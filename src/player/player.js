@@ -1,6 +1,4 @@
-"use strict";
-
-class Player {
+export default class Player {
   constructor(processor, sampleRate = 0, streamSize = 0, env = "") {
     this.processor = processor;
     this.sampleRate = sampleRate;
@@ -12,5 +10,3 @@ class Player {
 
   pause() {}
 }
-
-export default Player;
