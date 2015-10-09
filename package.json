@@ -30,15 +30,13 @@
     "audio",
     "webaudioapi"
   ],
-  "licenses": "MIT",
-  "main": "lib/node.js",
+  "main": "./index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/mohayonao/pico.js.git"
   },
   "scripts": {
     "build": "npm run build-to5 && npm run build-browser && npm run build-minify",
-    "build-to5": "babel src --out-dir lib --remove-comments",
     "build-browser": "browserify lib/browser.js --standalone Pico -o build/pico.js",
     "build-minify": "uglifyjs build/pico.js -o build/pico.min.js",
     "cover": "babel-node $(npm bin)/isparta cover --report text --report html _mocha",
