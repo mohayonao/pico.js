@@ -1,8 +1,8 @@
 {
   "name": "node-pico",
   "description": "Audio processor for the cross-platform",
-  "version": "2.0.0",
-  "author": "nao yonamine <mohayonao@gmail.com>",
+  "version": "2.0.1",
+  "author": "Nao Yonamine <mohayonao@gmail.com>",
   "bugs": {
     "url": "https://github.com/mohayonao/pico.js/issues"
   },
@@ -23,6 +23,9 @@
     "uglify-js": "^2.4.24"
   },
   "files": [
+    "package.json",
+    "README.md",
+    "index.js",
     "lib"
   ],
   "homepage": "https://github.com/mohayonao/pico.js/",
@@ -30,6 +33,7 @@
     "audio",
     "webaudioapi"
   ],
+  "license": "MIT",
   "main": "./index.js",
   "repository": {
     "type": "git",
@@ -39,9 +43,10 @@
     "build": "npm run build-to5 && npm run build-browser && npm run build-minify",
     "build-browser": "browserify lib/browser.js --standalone Pico -o build/pico.js",
     "build-minify": "uglifyjs build/pico.js -o build/pico.min.js",
+    "build-to5": "babel src --out-dir lib --remove-comments",
     "cover": "babel-node $(npm bin)/isparta cover --report text --report html _mocha",
-    "prepublish": "rm -rf lib && npm run lint && npm run test && npm run build-to5",
     "lint": "eslint src test",
+    "prepublish": "rm -rf lib && npm run lint && npm run test && npm run build-to5",
     "test": "mocha --compilers js:espower-babel/guess",
     "travis": "npm run lint && npm run test"
   }
