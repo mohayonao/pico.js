@@ -3,5 +3,5 @@
   "env": {
     "node": true
   },
-  "extends": "eslint:recommended"
+  "extends": "mohayonao"
 }
