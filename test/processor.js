@@ -1,10 +1,10 @@
 /* eslint-disable consistent-this */
 /* eslint-disable no-undefined */
 
-import assert from "power-assert";
-import sinon from "sinon";
-import Player from "../src/player/player";
-import Processor from "../src/processor";
+const assert = require("power-assert");
+const sinon = require("sinon");
+const Player = require("../src/player/player");
+const Processor = require("../src/processor");
 
 describe("Processor", () => {
   describe("constructor", () => {

@@ -1,7 +1,7 @@
 /* eslint-disable no-undefined */
 
-import assert from "power-assert";
-import Player from "../src/player/player";
+const assert = require("power-assert");
+const Player = require("../src/player/player");
 
 describe("Player", () => {
   describe("constructor", () => {

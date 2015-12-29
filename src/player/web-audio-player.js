@@ -1,8 +1,7 @@
-import Player from "./player";
+const Player = require("./player");
+const AudioContext = global.AudioContext || global.webkitAudioContext;
 
-let AudioContext = global.AudioContext || global.webkitAudioContext;
-
-export default class WebAudioPlayer extends Player {
+class WebAudioPlayer extends Player {
   constructor(processor) {
     super(processor, 44100, 2048, "webaudio");
 
@@ -32,6 +31,10 @@ export default class WebAudioPlayer extends Player {
     this._bufSrc.disconnect();
     this._jsNode.disconnect();
   }
+
+  static get isEnabled() {
+    return !!AudioContext;
+  }
 }
 
-WebAudioPlayer.isEnabled = !!AudioContext;
+module.exports = WebAudioPlayer;

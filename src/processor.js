@@ -1,8 +1,7 @@
-import Player from "./player/player";
-
+const Player = require("./player/player");
 const BUFFER_SIZE = 64;
 
-export default class Processor {
+class Processor {
   constructor() {
     this.player = new Player(this);
     this.audioprocess = null;
@@ -72,3 +71,5 @@ export default class Processor {
     }
   }
 }
+
+module.exports = Processor;

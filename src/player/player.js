@@ -1,4 +1,4 @@
-export default class Player {
+class Player {
   constructor(processor, sampleRate = 0, streamSize = 0, env = "") {
     this.processor = processor;
     this.sampleRate = sampleRate;
@@ -10,3 +10,5 @@ export default class Player {
 
   pause() {}
 }
+
+module.exports = Player;

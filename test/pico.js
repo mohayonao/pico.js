@@ -1,8 +1,8 @@
 /* eslint-disable no-undefined */
 
-import assert from "power-assert";
-import Player from "../src/player/player";
-import Pico from "../src/pico";
+const assert = require("power-assert");
+const Player = require("../src/player/player");
+const Pico = require("../src/pico");
 
 describe("Pico", () => {
   describe("bind", () => {

@@ -1,6 +1,6 @@
-import Player from "./player";
+const Player = require("./player");
 
-export default class FlashFallbackPlayer extends Player {
+class FlashFallbackPlayer extends Player {
   constructor(processor) {
     super(processor, 44100, 2048, "flashfallback");
 
@@ -109,3 +109,5 @@ FlashFallbackPlayer.fallback = (Pico) => {
     FlashFallbackPlayer.swf = global.document.getElementById(swfId);
   });
 };
+
+module.exports = FlashFallbackPlayer;

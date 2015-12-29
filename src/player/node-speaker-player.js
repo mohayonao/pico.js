@@ -1,8 +1,8 @@
-import stream from "stream";
-import Speaker from "speaker";
-import Player from "./player";
+const stream = require("stream");
+const Speaker = require("speaker");
+const Player = require("./player");
 
-export default class NodeSpeakerPlayer extends Player {
+class NodeSpeakerPlayer extends Player {
   constructor(processor) {
     super(processor, 44100, 2048, "node");
 
@@ -40,3 +40,5 @@ export default class NodeSpeakerPlayer extends Player {
     });
   }
 }
+
+module.exports = NodeSpeakerPlayer;
