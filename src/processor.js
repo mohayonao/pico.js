@@ -23,8 +23,8 @@ export default class Processor {
     return BUFFER_SIZE;
   }
 
-  bind(klass) {
-    this.player = new klass(this);
+  bind(Klass) {
+    this.player = new Klass(this);
   }
 
   play(audioprocess) {
@@ -32,11 +32,11 @@ export default class Processor {
       this.isPlaying = true;
       this.streams = [
         new Float32Array(this.player.streamSize),
-        new Float32Array(this.player.streamSize)
+        new Float32Array(this.player.streamSize),
       ];
       this.buffers = [
         new Float32Array(BUFFER_SIZE),
-        new Float32Array(BUFFER_SIZE)
+        new Float32Array(BUFFER_SIZE),
       ];
       this.audioprocess = audioprocess;
       this.player.play();
@@ -65,7 +65,7 @@ export default class Processor {
     for (let i = 0; i < n; i++) {
       audioprocess({
         bufferSize: BUFFER_SIZE,
-        buffers: buffers
+        buffers: buffers,
       });
       streamL.set(bufferL, i * BUFFER_SIZE);
       streamR.set(bufferR, i * BUFFER_SIZE);

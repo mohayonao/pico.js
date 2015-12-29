@@ -60,8 +60,10 @@ let swfId = `PicoFlashFallbackPlayer${Date.now()}`;
 
 let getPicoSwfUrl = () => {
   let scripts = global.document.getElementsByTagName("script");
+
   for (let i = 0; i < scripts.length; i++) {
     let matched = scripts[i].src.match(/^(.*\/)pico(?:\.min)?\.js$/);
+
     if (matched) {
       return matched[1] + "pico.swf";
     }

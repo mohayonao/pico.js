@@ -29,7 +29,7 @@ export default class NodeSpeakerPlayer extends Player {
       sampleRate: this.sampleRate,
       samplesPerFrame: this.streamSize,
       channels: 2,
-      float: true
+      float: true,
     }));
   }
 

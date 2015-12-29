@@ -1,3 +1,6 @@
+/* eslint-disable consistent-this */
+/* eslint-disable no-undefined */
+
 import assert from "power-assert";
 import sinon from "sinon";
 import Player from "../src/player/player";
@@ -37,7 +40,7 @@ describe("Processor", () => {
       let processor = new Processor();
 
       assert(typeof processor.bind === "function");
-      assert(processor.bind(Player) === void 0);
+      assert(processor.bind(Player) === undefined);
     });
   });
   describe("play", () => {
@@ -45,7 +48,7 @@ describe("Processor", () => {
       let processor = new Processor();
 
       assert(typeof processor.play === "function");
-      assert(processor.play() === void 0);
+      assert(processor.play() === undefined);
     });
   });
   describe("pause", () => {
@@ -53,7 +56,7 @@ describe("Processor", () => {
       let processor = new Processor();
 
       assert(typeof processor.pause === "function");
-      assert(processor.pause() === void 0);
+      assert(processor.pause() === undefined);
     });
   });
   describe("works", () => {
@@ -100,6 +103,7 @@ describe("Processor", () => {
       assert(audioprocess.callCount === 2048 / processor.bufferSize);
 
       let e = audioprocess.args[0][0];
+
       assert(e.bufferSize === processor.bufferSize);
       assert(Array.isArray(e.buffers));
       assert(e.buffers.length === 2);

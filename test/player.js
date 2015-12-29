@@ -1,3 +1,5 @@
+/* eslint-disable no-undefined */
+
 import assert from "power-assert";
 import Player from "../src/player/player";
 
@@ -17,7 +19,7 @@ describe("Player", () => {
       let player = new Player();
 
       assert(typeof player.play === "function");
-      assert(player.play() === void 0);
+      assert(player.play() === undefined);
     });
   });
   describe("pause", () => {
@@ -25,7 +27,7 @@ describe("Player", () => {
       let player = new Player();
 
       assert(typeof player.pause === "function");
-      assert(player.pause() === void 0);
+      assert(player.pause() === undefined);
     });
   });
 });
