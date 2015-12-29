@@ -1,9 +1,9 @@
 {
   "name": "pico.js",
   "description": "Audio processor for the cross-platform",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "authors": [
-    "mohayonao <mohayonao@gmail.com>"
+    "Nao Yonamine <mohayonao@gmail.com>"
   ],
   "homepage": "https://github.com/mohayonao/pico.js",
   "ignore": [

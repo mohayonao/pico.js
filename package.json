@@ -1,7 +1,7 @@
 {
   "name": "node-pico",
   "description": "Audio processor for the cross-platform",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "author": "Nao Yonamine <mohayonao@gmail.com>",
   "bugs": {
     "url": "https://github.com/mohayonao/pico.js/issues"
