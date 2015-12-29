@@ -1,24 +1,38 @@
-import assert from "power-assert";
-import Player from "../src/player/player";
-import Pico from "../src/pico";
+/* eslint-disable no-undefined */
+
+const assert = require("power-assert");
+const Pico = require("../src/pico");
+
+class Player {
+  constructor(processor, sampleRate = 0, streamSize = 0, env = "") {
+    this.processor = processor;
+    this.sampleRate = sampleRate;
+    this.streamSize = streamSize;
+    this.env = env;
+  }
+
+  play() {}
+
+  pause() {}
+}
 
 describe("Pico", () => {
   describe("bind", () => {
     it("(klass: function): void", () => {
       assert(typeof Pico.bind === "function");
-      assert(Pico.bind(Player) === void 0);
+      assert(Pico.bind(Player) === undefined);
     });
   });
   describe("play", () => {
     it("(audioprocess: function): void", () => {
       assert(typeof Pico.play === "function");
-      assert(Pico.play() === void 0);
+      assert(Pico.play() === undefined);
     });
   });
   describe("pause", () => {
     it("(): void", () => {
       assert(typeof Pico.pause === "function");
-      assert(Pico.pause() === void 0);
+      assert(Pico.pause() === undefined);
     });
   });
   describe("env", () => {

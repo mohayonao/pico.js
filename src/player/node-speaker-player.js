@@ -1,42 +1,23 @@
-import stream from "stream";
-import Speaker from "speaker";
-import Player from "./player";
+const Driver = require("pico.driver.nodeaudio");
 
-export default class NodeSpeakerPlayer extends Player {
+class NodeSpeakerPlayer {
   constructor(processor) {
-    super(processor, 44100, 2048, "node");
+    this._driver = new Driver();
+    this._driver.setup({ sampleRate: 44100, bufferLength: 2048 });
+    this._driver.processor = processor;
 
-    this._node = null;
+    this.env = "webaudio";
+    this.bufferLength = this._driver.bufferLength;
+    this.sampleRate = this._driver.sampleRate;
   }
 
   play() {
-    this._node = new stream.Readable();
-    this._node._read = (n) => {
-      let streamL = this.processor.streams[0];
-      let streamR = this.processor.streams[1];
-      let buf = new Buffer(n);
-
-      this.processor.process(this.streamSize);
-
-      for (let i = 0, imax = this.streamSize; i < imax; i++) {
-        buf.writeFloatLE(streamL[i], i * 8 + 0);
-        buf.writeFloatLE(streamR[i], i * 8 + 4);
-      }
-
-      this._node.push(buf);
-    };
-    this._node.pipe(new Speaker({
-      sampleRate: this.sampleRate,
-      samplesPerFrame: this.streamSize,
-      channels: 2,
-      float: true
-    }));
+    this._driver.start();
   }
 
   pause() {
-    process.nextTick(() => {
-      this._node.emit("end");
-      this._node = null;
-    });
+    this._driver.stop();
   }
 }
+
+module.exports = NodeSpeakerPlayer;

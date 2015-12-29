@@ -1,8 +1,8 @@
-import Processor from "./processor";
+const Processor = require("./processor");
 
 let processor = new Processor();
 
-export default new class Pico {
+class Pico {
   bind(klass) {
     processor.bind(klass);
   }
@@ -30,4 +30,6 @@ export default new class Pico {
   get isPlaying() {
     return processor.isPlaying;
   }
-}();
+}
+
+module.exports = new Pico();
