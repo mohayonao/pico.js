@@ -1,8 +1,20 @@
 /* eslint-disable no-undefined */
 
 const assert = require("power-assert");
-const Player = require("../src/player/player");
 const Pico = require("../src/pico");
+
+class Player {
+  constructor(processor, sampleRate = 0, streamSize = 0, env = "") {
+    this.processor = processor;
+    this.sampleRate = sampleRate;
+    this.streamSize = streamSize;
+    this.env = env;
+  }
+
+  play() {}
+
+  pause() {}
+}
 
 describe("Pico", () => {
   describe("bind", () => {

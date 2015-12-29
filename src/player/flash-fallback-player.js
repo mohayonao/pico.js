@@ -1,22 +1,47 @@
-const Player = require("./player");
+const SWFID = `PicoFlashFallbackPlayer${Date.now()}`;
 
-class FlashFallbackPlayer extends Player {
+class FlashFallbackPlayer {
   constructor(processor) {
-    super(processor, 44100, 2048, "flashfallback");
+    this.env = "flashfallback";
+    this.sampleRate = 44100;
+    this.bufferLength = 2048;
+    this.processor = processor;
 
-    this._out = new Array(this.streamSize * 2);
-    this._writtenIncr = this.streamSize / this.sampleRate * 1000;
-    this._written = 0;
-    this._start = 0;
     this._timerId = 0;
+    this._timerAPI = global;
   }
 
   play() {
     if (FlashFallbackPlayer.swf && this._timerId === 0) {
-      this._written = 0;
-      this._start = Date.now();
-      this._timerId = setInterval(() => {
-        this.onaudioprocess(this.streamSize);
+      let processor = this.processor;
+      let bufferLength = this.bufferLength;
+      let bufL = new Float32Array(bufferLength);
+      let bufR = new Float32Array(bufferLength);
+      let out = new Array(bufferLength * 2);
+      let written = 0;
+      let startTime = Date.now();
+      let writtenIncr = bufferLength / this.sampleRate * 1000;
+
+      this._timerId = this._timerAPI.setInterval(() => {
+        if (written < Date.now() - startTime) {
+          let x;
+
+          processor.process(bufL, bufR);
+
+          for (let i = 0, j = 0; i < bufferLength; i++) {
+            x = (bufL[i] * 16384 + 32768)|0;
+            x = Math.max(16384, Math.min(x, 49152));
+            out[j++] = String.fromCharCode(x);
+
+            x = (bufR[i] * 16384 + 32768)|0;
+            x = Math.max(16384, Math.min(x, 49152));
+            out[j++] = String.fromCharCode(x);
+          }
+
+          FlashFallbackPlayer.swf.write(out.join(""));
+
+          written += writtenIncr;
+        }
       }, 25);
       FlashFallbackPlayer.swf.play();
     }
@@ -24,41 +49,14 @@ class FlashFallbackPlayer extends Player {
 
   pause() {
     if (FlashFallbackPlayer.swf && this._timerId !== 0) {
-      clearInterval(this._timerId);
+      this._timerAPI.clearInterval(this._timerId);
       this._timerId = 0;
       FlashFallbackPlayer.swf.pause();
     }
   }
-
-  onaudioprocess(streamSize) {
-    if (this._written < Date.now() - this._start) {
-      let x;
-      let streamL = this.processor.streams[0];
-      let streamR = this.processor.streams[1];
-      let out = this._out;
-
-      this.processor.process(streamSize);
-
-      for (let i = 0, j = 0; i < streamSize; i++) {
-        x = (streamL[i] * 16384 + 32768)|0;
-        x = Math.max(16384, Math.min(x, 49152));
-        out[j++] = String.fromCharCode(x);
-
-        x = (streamR[i] * 16384 + 32768)|0;
-        x = Math.max(16384, Math.min(x, 49152));
-        out[j++] = String.fromCharCode(x);
-      }
-
-      FlashFallbackPlayer.swf.write(out.join(""));
-
-      this._written += this._writtenIncr;
-    }
-  }
 }
 
-let swfId = `PicoFlashFallbackPlayer${Date.now()}`;
-
-let getPicoSwfUrl = () => {
+function getPicoSwfUrl() {
   let scripts = global.document.getElementsByTagName("script");
 
   for (let i = 0; i < scripts.length; i++) {
@@ -69,9 +67,9 @@ let getPicoSwfUrl = () => {
     }
   }
   return "pico.swf";
-};
+}
 
-let createFlashContainer = () => {
+function createFlashContainer(swfId) {
   let container = global.document.createElement("div");
   let object = global.document.createElement("object");
   let param = global.document.createElement("param");
@@ -96,7 +94,7 @@ let createFlashContainer = () => {
   container.appendChild(object);
 
   return container;
-};
+}
 
 FlashFallbackPlayer.fallback = (Pico) => {
   global.picojs$flashfallback = () => {
@@ -105,8 +103,8 @@ FlashFallbackPlayer.fallback = (Pico) => {
   };
 
   global.window.addEventListener("load", () => {
-    global.document.body.appendChild(createFlashContainer());
-    FlashFallbackPlayer.swf = global.document.getElementById(swfId);
+    global.document.body.appendChild(createFlashContainer(SWFID));
+    FlashFallbackPlayer.swf = global.document.getElementById(SWFID);
   });
 };
 

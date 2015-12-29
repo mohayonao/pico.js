@@ -7,8 +7,8 @@
     "url": "https://github.com/mohayonao/pico.js/issues"
   },
   "dependencies": {
-    "readable-stream": "^2.0.2",
-    "speaker": "^0.2.6"
+    "pico.driver.nodeaudio": "^1.0.0",
+    "pico.driver.webaudio": "^1.0.1"
   },
   "devDependencies": {
     "babel": "^6.3.26",

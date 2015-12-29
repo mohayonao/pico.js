@@ -3,13 +3,27 @@
 
 const assert = require("power-assert");
 const sinon = require("sinon");
-const Player = require("../src/player/player");
 const Processor = require("../src/processor");
+
+class Player {
+  constructor(processor, sampleRate = 0, streamSize = 0, env = "") {
+    this.processor = processor;
+    this.sampleRate = sampleRate;
+    this.streamSize = streamSize;
+    this.env = env;
+  }
+
+  play() {}
+
+  pause() {}
+}
 
 describe("Processor", () => {
   describe("constructor", () => {
     it("()", () => {
       let processor = new Processor();
+
+      processor.player = new Player();
 
       assert(processor instanceof Processor);
     });
@@ -18,6 +32,8 @@ describe("Processor", () => {
     it("getter: string", () => {
       let processor = new Processor();
 
+      processor.player = new Player();
+
       assert(typeof processor.env === "string");
     });
   });
@@ -25,12 +41,16 @@ describe("Processor", () => {
     it("getter: number", () => {
       let processor = new Processor();
 
+      processor.player = new Player();
+
       assert(typeof processor.sampleRate === "number");
     });
   });
   describe("bufferSize", () => {
     it("getter: number", () => {
       let processor = new Processor();
+
+      processor.player = new Player();
 
       assert(typeof processor.bufferSize === "number");
     });
@@ -47,6 +67,8 @@ describe("Processor", () => {
     it("(audioprocess: function): void", () => {
       let processor = new Processor();
 
+      processor.player = new Player();
+
       assert(typeof processor.play === "function");
       assert(processor.play() === undefined);
     });
@@ -54,6 +76,8 @@ describe("Processor", () => {
   describe("pause", () => {
     it("(): void", () => {
       let processor = new Processor();
+
+      processor.player = new Player();
 
       assert(typeof processor.pause === "function");
       assert(processor.pause() === undefined);
@@ -76,6 +100,8 @@ describe("Processor", () => {
     it("audioprocess", () => {
       let processor = new Processor();
       let audioprocess = sinon.spy();
+      let bufL = new Float32Array(2048);
+      let bufR = new Float32Array(2048);
 
       assert(testPlayer === null);
 
@@ -99,7 +125,7 @@ describe("Processor", () => {
       processor.play(null);
       assert(testPlayer.play.callCount === 1);
 
-      processor.process(2048);
+      processor.process(bufL, bufR);
       assert(audioprocess.callCount === 2048 / processor.bufferSize);
 
       let e = audioprocess.args[0][0];
